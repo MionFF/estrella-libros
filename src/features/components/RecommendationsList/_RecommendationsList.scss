@@ -1,0 +1,186 @@
+.recommendations-content {
+  padding: 60px 0;
+}
+
+.recommendations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+  padding: 0 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+
+.recommendations-header__info {
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 8px;
+
+    @media (max-width: 768px) {
+      font-size: 1.6rem;
+    }
+  }
+}
+
+.recommendations-header__updated {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.recommendations-header__refresh {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: #5a67d8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.refresh-icon {
+  transition: transform 0.3s ease;
+
+  .recommendations-header__refresh:hover & {
+    transform: rotate(180deg);
+  }
+}
+
+// Специальная сетка для рекомендаций
+.books-grid--recommendations {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 30px;
+  padding: 0 20px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 0 16px;
+  }
+
+  .book-card {
+    margin: 0;
+    max-width: none;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
+.recommendations-loading {
+  text-align: center;
+  padding: 80px 20px;
+
+  p {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    color: var(--muted);
+  }
+}
+
+.recommendations-error {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.recommendations-error__content {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.recommendations-error__icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.recommendations-error__button {
+  padding: 12px 24px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #5a67d8;
+    transform: translateY(-1px);
+  }
+}
+
+.recommendations-empty {
+  text-align: center;
+  padding: 80px 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.recommendations-empty__icon {
+  font-size: 72px;
+  margin-bottom: 24px;
+  opacity: 0.7;
+}
+
+.recommendations-empty__button {
+  padding: 12px 28px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #5a67d8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+  }
+}
+
+.recommendations-footer {
+  text-align: center;
+  margin-top: 60px;
+  padding: 30px 20px;
+  background: rgba(102, 126, 234, 0.05);
+  border-radius: 12px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+
+  p {
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+}

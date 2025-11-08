@@ -1,0 +1,21 @@
+@import './styles.scss';
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  font-size: 16px;
+  color: var(--primary-color);
+  background-color: var(--background-color);
+}
+
+:root {
+  --primary-color: #000;
+  --secondary-color: #666;
+  --background-color: #fff;
+}
