@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import Header from '../../widgets/Header/Header'
 import Footer from '../../widgets/Footer/Footer'
+import ScrollTopButton from '../../features/ScrollTopButton/ScrollTopButton'
 
 export default function RootLayout() {
   return (
@@ -16,6 +17,7 @@ export default function RootLayout() {
       </main>
 
       <Footer>Estrella Libros</Footer>
+      <ScrollTopButton threshold={300} autoHideDelay={1800} />
     </>
   )
 }

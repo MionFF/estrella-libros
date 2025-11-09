@@ -11,6 +11,7 @@
 @use '../src/pages/search/SearchPage';
 @use '../src/features/components/SearchBooks/SearchBooks';
 @use '../src/features/components/SearchButton/SearchButton';
+@use '../src/features/ScrollTopButton/ScrollTopButton';
 
 :root {
   --container-width: 1200px;
