@@ -48,6 +48,12 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
+
+  &:focus {
+    outline: 2px solid #667eea; // Для доступности
+    outline-offset: 2px;
+  }
 
   &::before {
     content: '';

@@ -52,6 +52,15 @@
     transform: translateY(-50%);
     font-size: 20px;
     color: #6b7280;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.8;
+    }
   }
 
   &__actions {
