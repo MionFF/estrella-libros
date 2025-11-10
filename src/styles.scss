@@ -12,6 +12,9 @@
 @use '../src/features/components/SearchBooks/SearchBooks';
 @use '../src/features/components/SearchButton/SearchButton';
 @use '../src/features/ScrollTopButton/ScrollTopButton';
+@use '../src/pages/collections/featured-books/FeaturedBooks';
+@use '../src/pages/collections/new-releases/NewReleases';
+@use '../src/pages/collections/award-winners/AwardWinners';
 
 :root {
   --container-width: 1200px;

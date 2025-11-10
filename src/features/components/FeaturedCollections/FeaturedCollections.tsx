@@ -1,31 +1,32 @@
+import { useNavigate } from 'react-router-dom'
+
 const collections = [
   {
-    title: 'Bestsellers',
-    description: 'Most popular books this month',
-    icon: '🔥',
-    count: '2.4K+ books',
+    title: 'Featured Books',
+    description: 'Handpicked selection of remarkable literary works',
+    icon: '📖',
+    count: 'Curated collection',
+    path: 'featured-books',
   },
   {
     title: 'New Releases',
-    description: 'Fresh from the publishers',
+    description: 'Fresh books from contemporary authors and publishers',
     icon: '🆕',
-    count: '500+ books',
+    count: 'Latest additions',
+    path: 'new-releases',
   },
   {
     title: 'Award Winners',
-    description: 'Critically acclaimed literature',
+    description: 'Critically acclaimed and prize-winning literature',
     icon: '⭐',
-    count: '800+ books',
+    count: 'Prize collection',
+    path: 'award-winners',
   },
-  // {
-  //   title: "Editor's Picks",
-  //   description: 'Handpicked by our team',
-  //   icon: '🎯',
-  //   count: '300+ books',
-  // },
 ]
 
 export default function FeaturedCollections() {
+  const navigate = useNavigate()
+
   return (
     <div className='featured-collections'>
       <h2>Featured Collections</h2>
@@ -33,7 +34,11 @@ export default function FeaturedCollections() {
 
       <div className='collections-grid'>
         {collections.map((collection, index) => (
-          <div key={index} className='collection-card'>
+          <div
+            onClick={() => navigate(`/${collection.path}`)}
+            key={index}
+            className='collection-card'
+          >
             <div className='collection-card__icon'>{collection.icon}</div>
             <h3 className='collection-card__title'>{collection.title}</h3>
             <p className='collection-card__description'>{collection.description}</p>

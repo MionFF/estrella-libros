@@ -4,6 +4,9 @@ import HomePage from '../pages/home/HomePage'
 import Recommendations from '../pages/recommendations/Recommendations'
 import SearchPage from '../pages/search/SearchPage'
 import { ScrollToTop } from '../helpers/ScrollToTop'
+import FeaturedBooks from '../pages/collections/featured-books/FeaturedBooks'
+import NewReleases from '../pages/collections/new-releases/NewReleases'
+import AwardWinners from '../pages/collections/award-winners/AwardWinners'
 
 export default function App() {
   return (
@@ -13,6 +16,9 @@ export default function App() {
           <Route index element={<HomePage />} />
           <Route path={'search'} element={<SearchPage />} />
           <Route path={'recommendations'} element={<Recommendations />} />
+          <Route path={'featured-books'} element={<FeaturedBooks />} />
+          <Route path={'new-releases'} element={<NewReleases />} />
+          <Route path={'award-winners'} element={<AwardWinners />} />
         </Route>
       </Routes>
       <ScrollToTop />
