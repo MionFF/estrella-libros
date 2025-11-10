@@ -1,4 +1,3 @@
-// hooks/useRecommendations.ts
 import { useGoogleBooks } from './useGoogleBooks'
 
 export const useRecommendations = () => {
@@ -6,39 +5,68 @@ export const useRecommendations = () => {
 
   const recommendationStrategies = [
     {
-      name: 'bestsellers',
-      query: 'bestseller 2024',
-      description: 'Popular Books This Year',
+      name: 'mysteryThriller',
+      query: 'mystery thriller suspense novel',
+      description: 'Page-Turning Thrillers',
     },
     {
-      name: 'awardWinners',
-      query: 'award winning book',
-      description: 'Award Winning Literature',
+      name: 'sciFiFantasy',
+      query: 'science fiction fantasy epic',
+      description: 'Sci-Fi & Fantasy Adventures',
     },
     {
-      name: 'classics',
-      query: 'classic literature',
-      description: 'Timeless Classics',
+      name: 'romance',
+      query: 'romance love story contemporary',
+      description: 'Heartwarming Romance',
     },
     {
-      name: 'newReleases',
-      query: `published:${new Date().getFullYear()}`,
-      description: 'New Releases',
+      name: 'biography',
+      query: 'biography memoir autobiography',
+      description: 'Inspiring Life Stories',
     },
     {
-      name: 'highlyRated',
-      query: 'highly recommended books',
-      description: 'Reader Favorites',
+      name: 'historicalFiction',
+      query: 'historical fiction period drama',
+      description: 'Historical Journeys',
+    },
+    {
+      name: 'selfDevelopment',
+      query: 'self development personal growth',
+      description: 'Personal Growth',
+    },
+    {
+      name: 'youngAdult',
+      query: 'young adult contemporary YA',
+      description: 'Young Adult Favorites',
+    },
+    {
+      name: 'shortStories',
+      query: 'short stories collection anthology',
+      description: 'Bite-Sized Stories',
+    },
+    {
+      name: 'travelAdventure',
+      query: 'travel adventure exploration',
+      description: 'Adventure & Travel',
+    },
+    {
+      name: 'philosophy',
+      query: 'philosophy thought-provoking',
+      description: 'Thought-Provoking Reads',
     },
   ]
 
   const loadRecommendations = () => {
-    // Выбираем случайную стратегию для разнообразия
-    const randomStrategy =
-      recommendationStrategies[Math.floor(Math.random() * recommendationStrategies.length)]
+    // Выбираем 2 случайные стратегии и комбинируем их
+    const shuffled = [...recommendationStrategies].sort(() => 0.5 - Math.random())
+    const selectedStrategies = shuffled.slice(0, 2)
 
-    console.log(`Loading: ${randomStrategy.description}`)
-    searchBooks(randomStrategy.query, 20)
+    // Создаем комбинированный запрос для большего разнообразия
+    const combinedQuery = selectedStrategies.map(strategy => strategy.query).join(' ')
+    const combinedDescription = selectedStrategies.map(strategy => strategy.description).join(' & ')
+
+    console.log(`Loading: ${combinedDescription}`)
+    searchBooks(combinedQuery, 25)
   }
 
   return {

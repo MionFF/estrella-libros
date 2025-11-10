@@ -63,14 +63,32 @@
 }
 
 .refresh-icon {
+  width: 16px;
+  height: 16px;
   transition: transform 0.3s ease;
 
-  .recommendations-header__refresh:hover & {
-    transform: rotate(180deg);
+  // Анимация вращения при загрузке
+  &--spinning {
+    animation: spin 1s linear infinite;
+  }
+
+  // Плавное вращение при ховере
+  .recommendations-header__refresh:hover:not(:disabled) & {
+    transform: rotate(90deg);
   }
 }
 
-// Специальная сетка для рекомендаций
+// Анимация вращения
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Остальные стили остаются без изменений
 .books-grid--recommendations {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));

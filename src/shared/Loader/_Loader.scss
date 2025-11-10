@@ -6,6 +6,7 @@
   background-size: 10px 10px;
   animation: l18 1s infinite;
   position: relative;
+  margin: 0 auto;
   /* Выравнивание лоадера к центру страницы */
 }
 .loader::before {
