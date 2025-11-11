@@ -2,10 +2,12 @@ import { useEffect } from 'react'
 import { useGoogleBooks } from '../../../hooks/useGoogleBooks'
 import BookCard from '../../../features/components/BookCard/BookCard'
 import Loader from '../../../shared/Loader/Loader'
+import { useNavigate } from 'react-router-dom'
 
 export default function NewReleases() {
   const { books, loading, error, searchBooks } = useGoogleBooks()
   const NEW_RELEASES_QUERY = 'subject:fiction 2024 2025'
+  const navigate = useNavigate()
 
   useEffect(() => {
     searchBooks(NEW_RELEASES_QUERY, 40)
@@ -15,9 +17,32 @@ export default function NewReleases() {
     searchBooks(NEW_RELEASES_QUERY, 40)
   }
 
+  const handleBack = () => {
+    navigate(-1)
+  }
+
   return (
     <div className='new-releases-page'>
       <div className='new-releases-header'>
+        {/* Выносим кнопку назад отдельно от контента */}
+        <button onClick={handleBack} className='new-releases-back-btn'>
+          <svg
+            width='20'
+            height='20'
+            viewBox='0 0 24 24'
+            fill='none'
+            xmlns='http://www.w3.org/2000/svg'
+          >
+            <path
+              d='M15 18L9 12L15 6'
+              stroke='currentColor'
+              strokeWidth='2'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+            />
+          </svg>
+        </button>
+
         <div className='new-releases-header__content'>
           <h1 className='new-releases-title'>🆕 New Releases</h1>
           <p className='new-releases-subtitle'>
@@ -46,6 +71,12 @@ export default function NewReleases() {
               <button onClick={handleRetry} className='new-releases-error__button'>
                 Try Again
               </button>
+              <button
+                onClick={handleBack}
+                className='new-releases-error__button new-releases-error__button--secondary'
+              >
+                Back to Home
+              </button>
             </div>
           </div>
         ) : (
@@ -59,6 +90,12 @@ export default function NewReleases() {
                 <p>We couldn't find any new books matching your criteria.</p>
                 <button onClick={handleRetry} className='new-releases-empty__button'>
                   Try Again
+                </button>
+                <button
+                  onClick={handleBack}
+                  className='featured-books-error__button featured-books-error__button--secondary'
+                >
+                  Back to Home
                 </button>
               </div>
             )}

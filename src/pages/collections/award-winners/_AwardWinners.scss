@@ -7,6 +7,7 @@
 }
 
 .award-winners-header {
+  @include mixins.no-select;
   background: linear-gradient(135deg, #cd7f32 0%, #ffd700 100%);
   color: white;
   padding: 80px 0 60px;
@@ -35,10 +36,54 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 0 20px;
+    position: relative;
+  }
+}
+
+.award-winners-back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  z-index: 10;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  @media (max-width: 768px) {
+    top: 16px;
+    left: 16px;
+    width: 40px;
+    height: 40px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
   }
 }
 
 .award-winners-title {
+  @include mixins.content-select;
   font-size: 3.5rem;
   font-weight: 800;
   margin-bottom: 16px;
@@ -46,6 +91,7 @@
 
   @media (max-width: 768px) {
     font-size: 2.5rem;
+    margin-top: 10px;
   }
 }
 
@@ -143,11 +189,18 @@
     line-height: 1.6;
   }
 
+  &__actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
   &__button {
     background: #667eea;
     color: white;
     border: none;
-    padding: 12px 32px;
+    padding: 12px 24px;
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
@@ -156,6 +209,17 @@
     &:hover {
       background: #5a6fd8;
       transform: translateY(-2px);
+    }
+
+    &--secondary {
+      background: transparent;
+      color: #667eea;
+      border: 2px solid #667eea;
+
+      &:hover {
+        background: #667eea;
+        color: white;
+      }
     }
   }
 }
@@ -187,11 +251,18 @@
     margin-right: auto;
   }
 
+  &__actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
   &__button {
     background: #667eea;
     color: white;
     border: none;
-    padding: 12px 32px;
+    padding: 12px 24px;
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
@@ -200,6 +271,17 @@
     &:hover {
       background: #5a6fd8;
       transform: translateY(-2px);
+    }
+
+    &--secondary {
+      background: transparent;
+      color: #667eea;
+      border: 2px solid #667eea;
+
+      &:hover {
+        background: #667eea;
+        color: white;
+      }
     }
   }
 }
@@ -219,6 +301,16 @@
   }
 
   .award-winners-header {
-    padding: 60px 0 40px;
+    padding: 70px 0 40px;
+  }
+
+  .award-winners-error__actions,
+  .award-winners-empty__actions {
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      width: 200px;
+    }
   }
 }
