@@ -7,6 +7,8 @@ import { ScrollToTop } from '../helpers/ScrollToTop'
 import FeaturedBooks from '../pages/collections/featured-books/FeaturedBooks'
 import NewReleases from '../pages/collections/new-releases/NewReleases'
 import AwardWinners from '../pages/collections/award-winners/AwardWinners'
+import Genres from '../pages/genres/Genres/Gengres'
+import GenreBookPage from '../pages/genres/GenreBookPage/GenreBookPage'
 
 export default function App() {
   return (
@@ -19,6 +21,8 @@ export default function App() {
           <Route path={'featured-books'} element={<FeaturedBooks />} />
           <Route path={'new-releases'} element={<NewReleases />} />
           <Route path={'award-winners'} element={<AwardWinners />} />
+          <Route path={'genres'} element={<Genres />} />
+          <Route path={'genres/:genreId'} element={<GenreBookPage />} />
         </Route>
       </Routes>
       <ScrollToTop />

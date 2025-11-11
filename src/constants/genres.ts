@@ -1,0 +1,58 @@
+export const GENRES = [
+  {
+    id: 'fiction',
+    name: 'Fiction',
+    query: 'fiction novel literature',
+    emoji: '📖',
+    description: 'Classic and contemporary novels',
+  },
+  {
+    id: 'mystery',
+    name: 'Mystery & Thriller',
+    query: 'mystery thriller crime detective',
+    emoji: '🕵️',
+    description: 'Suspenseful page-turners',
+  },
+  {
+    id: 'scifi',
+    name: 'Science Fiction',
+    query: 'science fiction sci-fi futuristic',
+    emoji: '🚀',
+    description: 'Futuristic worlds and technology',
+  },
+  {
+    id: 'fantasy',
+    name: 'Fantasy',
+    query: 'fantasy magic epic adventure',
+    emoji: '🐉',
+    description: 'Magical worlds and creatures',
+  },
+  {
+    id: 'romance',
+    name: 'Romance',
+    query: 'romance love relationship',
+    emoji: '💖',
+    description: 'Heartwarming love stories',
+  },
+  {
+    id: 'nonfiction',
+    name: 'Non-Fiction',
+    query: 'nonfiction biography history science',
+    emoji: '📚',
+    description: 'Real stories and knowledge',
+  },
+  {
+    id: 'history',
+    name: 'Historical',
+    query: 'historical fiction history',
+    emoji: '🏛️',
+    description: 'Journey through time',
+  },
+  {
+    id: 'biography',
+    name: 'Biography',
+    query: 'biography memoir autobiography',
+    emoji: '👤',
+    description: 'Inspiring life stories',
+  },
+] as const

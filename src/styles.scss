@@ -15,6 +15,8 @@
 @use '../src/pages/collections/featured-books/FeaturedBooks';
 @use '../src/pages/collections/new-releases/NewReleases';
 @use '../src/pages/collections/award-winners/AwardWinners';
+@use '../src/pages/genres/Genres/Genres';
+@use '../src/pages/genres/GenreBookPage/GenreBookPage';
 
 :root {
   --container-width: 1200px;
