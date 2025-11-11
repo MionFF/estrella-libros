@@ -33,7 +33,7 @@ export default function AwardWinners() {
 
       <div className='award-winners-container'>
         {loading ? (
-          <div className='award-winners-loading-overlay'>
+          <div className='award-winners-loading'>
             <Loader />
             <p>Loading award-winning books...</p>
           </div>

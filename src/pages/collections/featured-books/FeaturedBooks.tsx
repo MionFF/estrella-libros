@@ -33,7 +33,7 @@ export default function FeaturedBooks() {
 
       <div className='featured-books-container'>
         {loading ? (
-          <div className='featured-books-loading-overlay'>
+          <div className='featured-books-loading'>
             <Loader />
             <p>Discovering remarkable books...</p>
           </div>

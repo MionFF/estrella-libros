@@ -33,7 +33,7 @@ export default function NewReleases() {
 
       <div className='new-releases-container'>
         {loading ? (
-          <div className='new-releases-loading-overlay'>
+          <div className='new-releases-loading'>
             <Loader />
             <p>Loading new releases...</p>
           </div>

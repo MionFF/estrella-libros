@@ -17,7 +17,7 @@ export default function RootLayout() {
       </main>
 
       <Footer>Estrella Libros</Footer>
-      <ScrollTopButton threshold={300} autoHideDelay={1800} />
+      <ScrollTopButton threshold={300} autoHideDelay={2000} />
     </>
   )
 }
