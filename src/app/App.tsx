@@ -9,6 +9,7 @@ import NewReleases from '../pages/collections/new-releases/NewReleases'
 import AwardWinners from '../pages/collections/award-winners/AwardWinners'
 import Genres from '../pages/genres/Genres/Gengres'
 import GenreBookPage from '../pages/genres/GenreBookPage/GenreBookPage'
+import FavoritesPage from '../pages/favorites/FavoritesPage'
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
           <Route path={'award-winners'} element={<AwardWinners />} />
           <Route path={'genres'} element={<Genres />} />
           <Route path={'genres/:genreId'} element={<GenreBookPage />} />
+          <Route path={'favorites'} element={<FavoritesPage />} />
         </Route>
       </Routes>
       <ScrollToTop />

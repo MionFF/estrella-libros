@@ -7,6 +7,7 @@ export default function RootLayout() {
   return (
     <>
       <Header>
+        <NavLink to={'favorites'}>Favorites</NavLink>
         <NavLink to={'genres'}>Gengres</NavLink>
         <NavLink to={'recommendations'}>Recommendations</NavLink>
         <NavLink to={'search'}>Search</NavLink>

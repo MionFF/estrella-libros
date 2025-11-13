@@ -17,6 +17,9 @@
 @use '../src/pages/collections/award-winners/AwardWinners';
 @use '../src/pages/genres/Genres/Genres';
 @use '../src/pages/genres/GenreBookPage/GenreBookPage';
+@use '../src/pages/favorites/FavoritesPage';
+@use '../src/features/components/FavoriteButton/FavoriteButton';
+@use '../src/features/components/FavoritesHero/FavoritesHero';
 
 :root {
   --container-width: 1200px;

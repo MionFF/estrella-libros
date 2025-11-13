@@ -24,4 +24,5 @@ export type UseGoogleBooksReturn = {
   searchBooks: (query: string, maxResults?: number) => Promise<void>
   clearBooks: () => void
   hasMore: boolean
+  getBookById: (bookId: string) => Promise<Book | null>
 }

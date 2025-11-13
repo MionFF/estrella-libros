@@ -1,4 +1,5 @@
 import type { Book } from '../../types'
+import FavoriteButton from '../FavoriteButton/FavoriteButton'
 
 interface RecommendationsBookCardProps {
   book: Book
@@ -18,7 +19,11 @@ export default function BookCard({ book }: RecommendationsBookCardProps) {
 
       {/* Информация о книге */}
       <div className='book-card__body'>
-        <h3 className='book-card__title'>{book.title}</h3>
+        {/* Заголовок и кнопка избранного в одной строке */}
+        <div className='book-card__header'>
+          <h3 className='book-card__title'>{book.title}</h3>
+          <FavoriteButton bookId={book.id} size='md' />
+        </div>
 
         {/* Авторы */}
         <p className='book-card__authors'>by {book.authors.join(', ')}</p>

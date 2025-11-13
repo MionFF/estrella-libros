@@ -1,10 +1,15 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import './index.css';
-import App from './app/App.tsx';
+import { StrictMode, Suspense } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './app/App.tsx'
+import { enableMapSet } from 'immer'
+enableMapSet()
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
-);
+  <Suspense fallback={null}>
+    <StrictMode>
+      <App />
+    </StrictMode>
+    ,
+  </Suspense>,
+)
