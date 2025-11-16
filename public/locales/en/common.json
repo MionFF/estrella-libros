@@ -1,0 +1,203 @@
+{
+  "header": {
+    "home": "Home",
+    "search": "Search",
+    "recommendations": "Recommendations",
+    "genres": "Genres",
+    "favorites": "Favorites"
+  },
+
+  "footer": {
+    "description": "Your gateway to a universe of stories. Discover, explore, and fall in love with books.",
+    "explore": "Explore",
+    "support": "Support",
+    "helpCenter": "Help Center",
+    "contactUs": "Contact Us",
+    "feedback": "Feedback"
+  },
+
+  "home": {
+    "title": "Begin Your Literary Journey",
+    "subtitle": "Discover millions of books at your fingertips",
+    "homeSearchButton": "Explore Our Library",
+
+    "homeHero": {
+      "badge": "New & Improved",
+      "title": "Welcome to Estrella Libros!",
+      "subtitle": "Your gateway to a universe of stories. Discover, explore, and fall in love with books.",
+      "statLabel1": "Books Available",
+      "statLabel2": "Happy Readers",
+      "statLabel3": "Access"
+    },
+
+    "featuredCollection": {
+      "title": "Featured Collections",
+      "subtitle": "Curated book selections for every taste",
+
+      "featuredBooks": {
+        "title": "Featured Books",
+        "description": "Handpicked selection of remarkable literary works",
+        "count": "Curated collection"
+      },
+
+      "newReleases": {
+        "title": "New Releases",
+        "description": "Fresh books from contemporary authors and publishers",
+        "count": "Latest additions"
+      },
+
+      "awardWinners": {
+        "title": "Award Winners",
+        "description": "Critically acclaimed and prize-winning literature",
+        "count": "Prize collection"
+      }
+    }
+  },
+
+  "search": {
+    "inputPlaceholder": "Search by title, author, genre...",
+    "searchButton": "Search",
+    "searchingButton": "Searching...",
+    "clearButton": "Clear",
+    "loadingLabel": "Searching for books...",
+    "errorMessage": "Oops! Something went wrong",
+    "errorButtonLabel": "Try Again",
+
+    "foundBooks": "Found {{count}} book",
+    "foundBooks_plural": "Found {{count}} books",
+    "noBooksFound": "No books found",
+    "searchFor": "for \"{{query}}\"",
+
+    "emptyTitle": "No books found",
+    "emptySubtitle": "Try adjusting your search terms or browse the suggestions above.",
+
+    "welcomeTitle": "Start Your Book Discovery",
+    "welcomeSubtitle": "Search by title, author, genre, or topic to find your next favorite book.",
+
+    "suggestions": {
+      "try": "Try:",
+      "fiction": "fiction",
+      "science": "science",
+      "mystery": "mystery",
+      "programming": "programming"
+    }
+  },
+
+  "recommendations": {
+    "title": "Curated Recommendations",
+    "subtitle": "Handpicked books just for you. Discover new favorites from our carefully selected collections.",
+    "featureTag1": "Personalized",
+    "featureTag2": "Highly Rated",
+    "featureTag3": "Regularly Updated",
+
+    "list": {
+      "title": "Your Personalized Selection",
+      "lastUpdated": "Updated on",
+      "refreshButton": "Refresh",
+      "refreshRecommendations": "Refresh Recommendations",
+
+      "loadingLabel": "Discovering amazing books for you...",
+      "errorLabel": "Unable to Load Recommendations",
+      "emptyTitle": "No Recommendations Available",
+      "emptySubtitle": "We're having trouble finding recommendations right now. Please try refreshing.",
+      "footerTip": "Pro Tip:",
+      "footerTipContent": "Recommendations are updated regularly. Check back for new discoveries!"
+    }
+  },
+
+  "genres": {
+    "title": "Explore Genres",
+    "subtitle": "Discover books by your favorite categories",
+
+    "fiction": {
+      "name": "Fiction",
+      "description": "Classic and contemporary novels"
+    },
+    "mystery": {
+      "name": "Mystery & Thriller",
+      "description": "Suspenseful page-turners"
+    },
+    "scifi": {
+      "name": "Science Fiction",
+      "description": "Futuristic worlds and technology"
+    },
+    "fantasy": {
+      "name": "Fantasy",
+      "description": "Magical worlds and creatures"
+    },
+    "romance": {
+      "name": "Romance",
+      "description": "Heartwarming love stories"
+    },
+    "nonfiction": {
+      "name": "Non-Fiction",
+      "description": "Real stories and knowledge"
+    },
+    "history": {
+      "name": "Historical",
+      "description": "Journey through time"
+    },
+    "biography": {
+      "name": "Biography",
+      "description": "Inspiring life stories"
+    },
+
+    "bookPage": {
+      "emptyTitle": "Genre not found",
+      "backButton": "Back to Genres",
+      "loadingLabel": "Loading {{genre}} books...",
+      "errorTitle": "Unable to Load Books"
+    }
+  },
+
+  "favorites": {
+    "emptyTitle": "No favorites yet",
+    "emptySubtitle": "Start exploring books and add them to your favorites!",
+    "emptyButton": "Discover Books",
+    "loadingLabel": "Loading your favorite books...",
+    "warningLabel": "books could not be loaded",
+    "errorTitle": "No Books Loaded",
+    "errorSubtitle": "We couldn't load any of your favorite books. This might be a temporary issue.",
+
+    "hero": {
+      "title": "Your Favorites",
+      "subtitle": "Books you've loved and saved for later",
+      "subtitleCollectionOf": "Your personal collection of {{count}} beloved books"
+    }
+  },
+
+  "bookCard": {
+    "noCover": "No Cover",
+    "published": "Published",
+    "publisher": "Publisher",
+    "pages": "pages",
+    "genres": "Genres",
+    "preview": "Preview",
+    "moreInfo": "More Info"
+  },
+
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "tryAgain": "Try Again",
+    "back": "Back",
+    "backToHome": "Back to Home",
+    "readMore": "Read More",
+    "addToFavorites": "Add to Favorites",
+    "removeFromFavorites": "Remove from Favorites"
+  },
+
+  "loading": {
+    "discoveringBooks": "Discovering remarkable books...",
+    "loadingNewReleases": "Loading new releases...",
+    "loadingAwardWinners": "Loading award-winning books..."
+  },
+
+  "errors": {
+    "unableToLoadBooks": "Unable to Load Books",
+    "httpError": "HTTP error! Status: {{status}}",
+    "requestTimeout": "Request timeout",
+    "serviceUnavailable": "Service temporarily unavailable",
+    "networkError": "Network error"
+  }
+}

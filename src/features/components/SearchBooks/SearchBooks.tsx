@@ -2,11 +2,14 @@ import { useGoogleBooks } from '../../../hooks/useGoogleBooks'
 import Loader from '../../../shared/Loader/Loader'
 import React, { useState } from 'react'
 import BookCard from '../BookCard/BookCard'
+import { useTranslation } from 'react-i18next'
 
 export default function BooksList() {
   const { books, loading, error, searchBooks, clearBooks } = useGoogleBooks()
   const [searchQuery, setSearchQuery] = useState('')
   const [hasSearched, setHasSearched] = useState(false)
+
+  const { t } = useTranslation('common')
 
   const handleSearch = (query: string) => {
     if (!query.trim()) return
@@ -38,7 +41,7 @@ export default function BooksList() {
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder='Search by title, author, genre...'
+              placeholder={t('search.inputPlaceholder')}
               className='search-books__input'
             />
             <span
@@ -67,21 +70,26 @@ export default function BooksList() {
               disabled={!searchQuery.trim() || loading}
               className='search-books__button search-books__button--primary'
             >
-              {loading ? 'Searching...' : 'Search'}
+              {loading ? t('search.searchingButton') : t('search.searchButton')}
             </button>
             <button
               onClick={handleClear}
               className='search-books__button search-books__button--secondary'
             >
-              Clear
+              {t('search.clearButton')}
             </button>
           </div>
         </div>
 
         {/* Быстрые подсказки */}
         <div className='search-books__suggestions'>
-          <span>Try:</span>
-          {['fiction', 'science', 'mystery', 'programming'].map(tag => (
+          <span>{t('search.suggestions.try')}</span>
+          {[
+            t('search.suggestions.fiction'),
+            t('search.suggestions.science'),
+            t('search.suggestions.mystery'),
+            t('search.suggestions.programming'),
+          ].map(tag => (
             <button
               key={tag}
               onClick={() => {
@@ -100,7 +108,7 @@ export default function BooksList() {
       {loading && (
         <div className='search-books__loader'>
           <Loader />
-          <p>Searching for books...</p>
+          <p>{t('search.loadingLabel')}</p>
         </div>
       )}
 
@@ -108,13 +116,13 @@ export default function BooksList() {
       {error && (
         <div className='search-books__error'>
           <div className='search-books__error-message'>
-            <h3>Oops! Something went wrong</h3>
+            <h3>{t('search.errorMessage')}</h3>
             <p>{error}</p>
             <button
               onClick={() => handleSearch(searchQuery)}
               className='search-books__button search-books__button--primary'
             >
-              Try Again
+              {t('common.tryAgain')}
             </button>
           </div>
         </div>
@@ -127,10 +135,14 @@ export default function BooksList() {
             <div className='search-books__results-header'>
               <h2>
                 {books.length > 0
-                  ? `Found ${books.length} book${books.length !== 1 ? 's' : ''}`
-                  : 'No books found'}
+                  ? t('search.foundBooks', { count: books.length })
+                  : t('search.noBooksFound')}
               </h2>
-              {searchQuery && <p className='search-books__query'>for "{searchQuery}"</p>}
+              {searchQuery && (
+                <p className='search-books__query'>
+                  {t('search.searchFor', { query: searchQuery })}
+                </p>
+              )}
             </div>
           )}
 
@@ -143,14 +155,14 @@ export default function BooksList() {
           ) : hasSearched ? (
             <div className='search-books__empty'>
               <div className='search-books__empty-icon'>📚</div>
-              <h3>No books found</h3>
-              <p>Try adjusting your search terms or browse the suggestions above.</p>
+              <h3>{t('search.emptyTitle')}</h3>
+              <p>{t('search.emptySubtitle')}</p>
             </div>
           ) : (
             <div className='search-books__welcome'>
               <div className='search-books__welcome-icon'>🔍</div>
-              <h3>Start Your Book Discovery</h3>
-              <p>Search by title, author, genre, or topic to find your next favorite book.</p>
+              <h3>{t('search.welcomeTitle')}</h3>
+              <p>{t('search.welcomeSubtitle')}</p>
             </div>
           )}
         </div>

@@ -1,22 +1,38 @@
 import { useGoogleBooks } from '../../../hooks/useGoogleBooks'
 import BookCard from '../../../features/components/BookCard/BookCard'
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Loader from '../../../shared/Loader/Loader'
 import { GENRES } from '../../../constants/genres'
+import { useTranslation } from 'react-i18next'
 
 export default function GenreBookPage() {
   const { genreId } = useParams()
   const navigate = useNavigate()
   const { books, loading, error, searchBooks } = useGoogleBooks()
+  const { t } = useTranslation('common')
 
-  const genre = GENRES.find(g => g.id === genreId)
+  const localizedGenres = GENRES.map(genre => ({
+    ...genre,
+    name: t(`genres.${genre.id}.name`),
+    description: t(`genres.${genre.id}.description`),
+  }))
 
-  useEffect(() => {
+  const genre = localizedGenres.find(g => g.id === genreId)
+
+  // 🔥 ИСПРАВЛЕНИЕ: используем useCallback для стабильной функции
+  const searchGenreBooks = useCallback(() => {
     if (genre) {
       searchBooks(genre.query, 40)
     }
-  }, [genre])
+  }, [genre, searchBooks])
+
+  useEffect(() => {
+    // 🔥 Добавь проверку, чтобы не запускать при каждом рендере
+    if (genre && !loading && books.length === 0) {
+      searchBooks(genre.query, 40)
+    }
+  }, [genre]) // Только при смене жанра
 
   const handleBack = () => {
     navigate('/genres')
@@ -25,8 +41,8 @@ export default function GenreBookPage() {
   if (!genre) {
     return (
       <div className='genre-not-found'>
-        <h2>Genre not found</h2>
-        <button onClick={() => navigate('/genres')}>Back to Genres</button>
+        <h2>{t('genres.bookPage.emptyTitle')}</h2>
+        <button onClick={() => navigate('/genres')}>{t('genres.bookPage.backButton')}</button>
       </div>
     )
   }
@@ -35,7 +51,7 @@ export default function GenreBookPage() {
     <div className='genre-books-page'>
       <div className='genre-books-header'>
         <button onClick={handleBack} className='genre-books-back-btn'>
-          ← Back to Genres
+          ← {t('genres.bookPage.backButton')}
         </button>
         <div className='genre-books-header__content'>
           <h1>
@@ -49,15 +65,15 @@ export default function GenreBookPage() {
         {loading ? (
           <div className='genre-books-loading'>
             <Loader />
-            <p>Loading {genre.name} books...</p>
+            <p>{t('genres.bookPage.loadingLabel', { genre: genre.name })}</p>
           </div>
         ) : error ? (
           <div className='genre-books-error'>
             <div className='genre-books-error__content'>
               <div className='genre-books-error__icon'>😔</div>
-              <h3>Unable to Load Books</h3>
+              <h3>{t('genres.bookPage.errorTitle')}</h3>
               <p>{error}</p>
-              <button onClick={() => searchBooks(genre.query, 40)}>Try Again</button>
+              <button onClick={searchGenreBooks}>{t('common.tryAgain')}</button>
             </div>
           </div>
         ) : (

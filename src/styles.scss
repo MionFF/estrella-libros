@@ -20,6 +20,7 @@
 @use '../src/pages/favorites/FavoritesPage';
 @use '../src/features/components/FavoriteButton/FavoriteButton';
 @use '../src/features/components/FavoritesHero/FavoritesHero';
+@use '../src/features/components/LanguageMenu/LanguageMenu';
 
 :root {
   --container-width: 1200px;

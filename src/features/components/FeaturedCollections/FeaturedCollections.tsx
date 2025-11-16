@@ -1,36 +1,38 @@
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-
-const collections = [
-  {
-    title: 'Featured Books',
-    description: 'Handpicked selection of remarkable literary works',
-    icon: '📖',
-    count: 'Curated collection',
-    path: 'featured-books',
-  },
-  {
-    title: 'New Releases',
-    description: 'Fresh books from contemporary authors and publishers',
-    icon: '🆕',
-    count: 'Latest additions',
-    path: 'new-releases',
-  },
-  {
-    title: 'Award Winners',
-    description: 'Critically acclaimed and prize-winning literature',
-    icon: '⭐',
-    count: 'Prize collection',
-    path: 'award-winners',
-  },
-]
 
 export default function FeaturedCollections() {
   const navigate = useNavigate()
+  const { t } = useTranslation('common')
+
+  const collections = [
+    {
+      title: t('home.featuredCollection.featuredBooks.title'),
+      description: t('home.featuredCollection.featuredBooks.description'),
+      icon: '📖',
+      count: t('home.featuredCollection.featuredBooks.count'),
+      path: 'featured-books',
+    },
+    {
+      title: t('home.featuredCollection.newReleases.title'),
+      description: t('home.featuredCollection.newReleases.description'),
+      icon: '🆕',
+      count: t('home.featuredCollection.newReleases.count'),
+      path: 'new-releases',
+    },
+    {
+      title: t('home.featuredCollection.awardWinners.title'),
+      description: t('home.featuredCollection.awardWinners.description'),
+      icon: '⭐',
+      count: t('home.featuredCollection.awardWinners.count'),
+      path: 'award-winners',
+    },
+  ]
 
   return (
     <div className='featured-collections'>
-      <h2>Featured Collections</h2>
-      <p className='featured-collections__subtitle'>Curated book selections for every taste</p>
+      <h2>{t('home.featuredCollection.title')}</h2>
+      <p className='featured-collections__subtitle'>{t('home.featuredCollection.subtitle')}</p>
 
       <div className='collections-grid'>
         {collections.map((collection, index) => (

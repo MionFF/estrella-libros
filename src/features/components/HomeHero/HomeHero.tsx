@@ -1,27 +1,36 @@
+import { useTranslation } from 'react-i18next'
+
 export default function HomeHero() {
+  const { t } = useTranslation('common')
+
+  const badge = t('home.homeHero.badge')
+  const title = t('home.homeHero.title')
+  const subtitle = t('home.homeHero.subtitle')
+  const statLabel1 = t('home.homeHero.statLabel1')
+  const statLabel2 = t('home.homeHero.statLabel2')
+  const statLabel3 = t('home.homeHero.statLabel3')
+
   return (
     <section className='home-hero'>
       <div className='home-hero__overlay' />
       <div className='home-hero__background-pattern' />
       <div className='container'>
         <div className='home-hero__content'>
-          <div className='home-hero__badge'>✨ New & Improved</div>
-          <h1 className='home-hero__title'>Welcome to Estrella Libros!</h1>
-          <p className='home-hero__subtitle'>
-            Your gateway to a universe of stories. Discover, explore, and fall in love with books.
-          </p>
+          <div className='home-hero__badge'>✨ {badge}</div>
+          <h1 className='home-hero__title'>{title}</h1>
+          <p className='home-hero__subtitle'>{subtitle}</p>
           <div className='home-hero__stats'>
             <div className='stat'>
               <span className='stat__number'>1M+</span>
-              <span className='stat__label'>Books Available</span>
+              <span className='stat__label'>{statLabel1}</span>
             </div>
             <div className='stat'>
               <span className='stat__number'>50K+</span>
-              <span className='stat__label'>Happy Readers</span>
+              <span className='stat__label'>{statLabel2}</span>
             </div>
             <div className='stat'>
               <span className='stat__number'>24/7</span>
-              <span className='stat__label'>Access</span>
+              <span className='stat__label'>{statLabel3}</span>
             </div>
           </div>
         </div>

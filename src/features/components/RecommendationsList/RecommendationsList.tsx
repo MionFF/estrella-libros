@@ -2,15 +2,18 @@ import { useRecommendations } from '../../../hooks/useRecommendations'
 import { useEffect, useState } from 'react'
 import BookCard from '../BookCard/BookCard'
 import Loader from '../../../shared/Loader/Loader'
+import { useTranslation } from 'react-i18next'
 
 export default function RecommendationsList() {
   const { books, loading, error, loadRecommendations } = useRecommendations()
   const [lastUpdated, setLastUpdated] = useState<string>('')
 
+  const { i18n, t } = useTranslation('common')
+
   useEffect(() => {
     loadRecommendations()
     setLastUpdated(
-      new Date().toLocaleDateString('en-US', {
+      new Date().toLocaleDateString(i18n.language, {
         month: 'long',
         day: 'numeric',
         year: 'numeric',
@@ -21,7 +24,7 @@ export default function RecommendationsList() {
   const handleRefresh = () => {
     loadRecommendations()
     setLastUpdated(
-      new Date().toLocaleDateString('en-US', {
+      new Date().toLocaleDateString(i18n.language, {
         month: 'long',
         day: 'numeric',
         year: 'numeric',
@@ -33,7 +36,7 @@ export default function RecommendationsList() {
     return (
       <div className='recommendations-loading'>
         <Loader />
-        <p>Discovering amazing books for you...</p>
+        <p>{t('recommendations.list.loadingLabel')}</p>
       </div>
     )
 
@@ -42,10 +45,10 @@ export default function RecommendationsList() {
       <div className='recommendations-error'>
         <div className='recommendations-error__content'>
           <div className='recommendations-error__icon'>😔</div>
-          <h3>Unable to Load Recommendations</h3>
+          <h3>{t('recommendations.list.errorLabel')}</h3>
           <p>{error}</p>
           <button onClick={handleRefresh} className='recommendations-error__button'>
-            Try Again
+            {t('common.tryAgain')}
           </button>
         </div>
       </div>
@@ -56,9 +59,11 @@ export default function RecommendationsList() {
       {/* Header с информацией и кнопкой обновления */}
       <div className='recommendations-header'>
         <div className='recommendations-header__info'>
-          <h2>Your Personalized Selection</h2>
+          <h2>{t('recommendations.list.title')}</h2>
           {lastUpdated && (
-            <p className='recommendations-header__updated'>Updated on {lastUpdated}</p>
+            <p className='recommendations-header__updated'>
+              {t('recommendations.list.lastUpdated')} {lastUpdated}
+            </p>
           )}
         </div>
         <button
@@ -96,7 +101,7 @@ export default function RecommendationsList() {
               strokeLinejoin='round'
             />
           </svg>
-          Refresh
+          {t('recommendations.list.refreshButton')}
         </button>
       </div>
 
@@ -110,10 +115,10 @@ export default function RecommendationsList() {
       ) : (
         <div className='recommendations-empty'>
           <div className='recommendations-empty__icon'>📚</div>
-          <h3>No Recommendations Available</h3>
-          <p>We're having trouble finding recommendations right now. Please try refreshing.</p>
+          <h3>{t('recommendations.list.emptyTitle')}</h3>
+          <p>{t('recommendations.list.emptySubtitle')}</p>
           <button onClick={handleRefresh} className='recommendations-empty__button'>
-            Refresh Recommendations
+            {t('recommendations.list.refreshRecommendations')}
           </button>
         </div>
       )}
@@ -121,8 +126,8 @@ export default function RecommendationsList() {
       {/* Информация в футере */}
       <div className='recommendations-footer'>
         <p>
-          💡 <strong>Pro Tip:</strong> Recommendations are updated regularly. Check back for new
-          discoveries!
+          💡 <strong>{t('recommendations.list.footerTip')}</strong>{' '}
+          {t('recommendations.list.footerTipContent')}
         </p>
       </div>
     </div>

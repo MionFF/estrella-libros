@@ -6,6 +6,7 @@ import Loader from '../../shared/Loader/Loader'
 import FavoritesHero from '../../features/components/FavoritesHero/FavoritesHero'
 import type { Book } from '../../features/types'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 export default function FavoritesPage() {
   const favoriteIds = useIds()
@@ -13,6 +14,10 @@ export default function FavoritesPage() {
   const [favoriteBooks, setFavoriteBooks] = useState<Book[]>([])
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const { t } = useTranslation('common')
+
+  const heroTitle = `⭐ ${t('favorites.hero.title')}`
+  const heroSubtitle = t('favorites.hero.subtitle')
 
   // Загружаем реальные данные книг
   useEffect(() => {
@@ -51,14 +56,14 @@ export default function FavoritesPage() {
   if (favoriteIds.size === 0) {
     return (
       <div className='favorites-page'>
-        <FavoritesHero />
+        <FavoritesHero title={heroTitle} subtitle={heroSubtitle} />
         <div className='favorites-empty'>
           <div className='favorites-empty__content'>
             <div className='favorites-empty__icon'>📚</div>
-            <h2>No favorites yet</h2>
-            <p>Start exploring books and add them to your favorites!</p>
+            <h2>{t('favorites.emptyTitle')}</h2>
+            <p>{t('favorites.emptySubtitle')}</p>
             <button onClick={() => navigate('/search')} className='favorites-empty__button'>
-              Discover Books
+              {t('favorites.button')}
             </button>
           </div>
         </div>
@@ -69,10 +74,10 @@ export default function FavoritesPage() {
   if (loading) {
     return (
       <div className='favorites-page'>
-        <FavoritesHero />
+        <FavoritesHero title={heroTitle} subtitle={heroSubtitle} />
         <div className='favorites-loading'>
           <Loader />
-          <p>Loading your favorite books...</p>
+          <p>{t('favorites.loadingLabel')}</p>
         </div>
       </div>
     )
@@ -80,11 +85,13 @@ export default function FavoritesPage() {
 
   return (
     <div className='favorites-page'>
-      <FavoritesHero count={favoriteBooks.length} />
+      <FavoritesHero title={heroTitle} subtitle={heroSubtitle} count={favoriteBooks.length} />
 
       {favoriteBooks.length < favoriteIds.size && (
         <div className='favorites-warning'>
-          <p>⚠️ {favoriteIds.size - favoriteBooks.length} books could not be loaded</p>
+          <p>
+            ⚠️ {favoriteIds.size - favoriteBooks.length} {t('favorites.warningLabel')}
+          </p>
         </div>
       )}
 
@@ -99,10 +106,10 @@ export default function FavoritesPage() {
           <div className='favorites-error'>
             <div className='favorites-error__content'>
               <div className='favorites-error__icon'>😔</div>
-              <h3>No Books Loaded</h3>
-              <p>We couldn't load any of your favorite books. This might be a temporary issue.</p>
+              <h3>{t('favorites.errorTitle')}</h3>
+              <p>{t('favorites.errorSubtitle')}</p>
               <button onClick={() => window.location.reload()} className='favorites-error__button'>
-                Try Again
+                {t('common.tryAgain')}
               </button>
             </div>
           </div>

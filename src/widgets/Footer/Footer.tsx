@@ -1,7 +1,9 @@
 import type React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export default function Footer({ children }: { children: React.ReactNode }) {
   const year = new Date().getFullYear()
+  const { t } = useTranslation('common')
 
   return (
     <footer className='footer'>
@@ -14,24 +16,22 @@ export default function Footer({ children }: { children: React.ReactNode }) {
               <span className='footer__logo-icon'>📚</span>
               <span className='footer__logo-text'>Estrella Libros</span>
             </div>
-            <p className='footer__description'>
-              Your gateway to a universe of stories. Discover, explore, and fall in love with books.
-            </p>
+            <p className='footer__description'>{t('footer.description')}</p>
           </div>
 
           {/* Навигационные ссылки */}
           <nav className='footer__nav'>
             <div className='footer__nav-section'>
-              <h4>Explore</h4>
-              <a href='/'>Home</a>
-              <a href='/search'>Search</a>
-              <a href='/recommendations'>Recommendations</a>
+              <h4>{t('footer.explore')}</h4>
+              <a href='/'>{t('header.home')}</a>
+              <a href='/search'>{t('header.search')}</a>
+              <a href='/recommendations'>{t('header.recommendations')}</a>
             </div>
             <div className='footer__nav-section'>
-              <h4>Support</h4>
-              <a href='/help'>Help Center</a>
-              <a href='/contact'>Contact Us</a>
-              <a href='/feedback'>Feedback</a>
+              <h4>{t('footer.support')}</h4>
+              <a href='/help'>{t('footer.helpCenter')}</a>
+              <a href='/contact'>{t('footer.contactUs')}</a>
+              <a href='/feedback'>{t('footer.feedback')}</a>
             </div>
             <div className='footer__nav-section'>
               <h4>Legal</h4>

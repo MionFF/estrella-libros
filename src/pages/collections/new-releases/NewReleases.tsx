@@ -3,11 +3,14 @@ import { useGoogleBooks } from '../../../hooks/useGoogleBooks'
 import BookCard from '../../../features/components/BookCard/BookCard'
 import Loader from '../../../shared/Loader/Loader'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 export default function NewReleases() {
   const { books, loading, error, searchBooks } = useGoogleBooks()
   const NEW_RELEASES_QUERY = 'subject:fiction 2024 2025'
   const navigate = useNavigate()
+
+  const { t } = useTranslation('common')
 
   useEffect(() => {
     searchBooks(NEW_RELEASES_QUERY, 40)
@@ -44,13 +47,17 @@ export default function NewReleases() {
         </button>
 
         <div className='new-releases-header__content'>
-          <h1 className='new-releases-title'>🆕 New Releases</h1>
+          <h1 className='new-releases-title'>
+            🆕 {t('home.featuredCollection.newReleases.title')}
+          </h1>
           <p className='new-releases-subtitle'>
-            Fresh books from contemporary authors and publishers
+            {t('home.featuredCollection.newReleases.description')}
           </p>
           {!loading && books.length > 0 && (
             <div className='new-releases-stats'>
-              <span className='new-releases-count'>New Releases collection</span>
+              <span className='new-releases-count'>
+                {t('home.featuredCollection.newReleases.count')}
+              </span>
             </div>
           )}
         </div>
@@ -60,7 +67,7 @@ export default function NewReleases() {
         {loading ? (
           <div className='new-releases-loading'>
             <Loader />
-            <p>Loading new releases...</p>
+            <p>{t('loading.loadingNewReleases')}</p>
           </div>
         ) : error ? (
           <div className='new-releases-error'>
@@ -68,15 +75,17 @@ export default function NewReleases() {
               <div className='new-releases-error__icon'>😔</div>
               <h3>Unable to Load New Releases</h3>
               <p>{error}</p>
-              <button onClick={handleRetry} className='new-releases-error__button'>
-                Try Again
-              </button>
-              <button
-                onClick={handleBack}
-                className='new-releases-error__button new-releases-error__button--secondary'
-              >
-                Back to Home
-              </button>
+              <div className='new-releases-error__actions'>
+                <button onClick={handleRetry} className='new-releases-error__button'>
+                  {t('common.tryAgain')}
+                </button>
+                <button
+                  onClick={handleBack}
+                  className='new-releases-error__button new-releases-error__button--secondary'
+                >
+                  {t('common.backToHome')}
+                </button>
+              </div>
             </div>
           </div>
         ) : (
@@ -89,13 +98,13 @@ export default function NewReleases() {
                 <h3>No New Releases Found</h3>
                 <p>We couldn't find any new books matching your criteria.</p>
                 <button onClick={handleRetry} className='new-releases-empty__button'>
-                  Try Again
+                  {t('common.tryAgain')}
                 </button>
                 <button
                   onClick={handleBack}
                   className='featured-books-error__button featured-books-error__button--secondary'
                 >
-                  Back to Home
+                  {t('common.backToHome')}
                 </button>
               </div>
             )}

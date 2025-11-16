@@ -1,0 +1,203 @@
+{
+  "header": {
+    "home": "Inicio",
+    "search": "Buscar",
+    "recommendations": "Recomendaciones",
+    "genres": "Géneros",
+    "favorites": "Favoritos"
+  },
+
+  "footer": {
+    "description": "Tu puerta de entrada a un universo de historias. Descubre, explora y enamórate de los libros.",
+    "explore": "Explorar",
+    "support": "Soporte",
+    "helpCenter": "Centro de Ayuda",
+    "contactUs": "Contáctanos",
+    "feedback": "Comentarios"
+  },
+
+  "home": {
+    "title": "Comienza tu viaje literario",
+    "subtitle": "Descubre millones de libros al alcance de tu mano",
+    "homeSearchButton": "Explorar Biblioteca",
+
+    "homeHero": {
+      "badge": "Nuevo y Mejorado",
+      "title": "¡Bienvenido a Estrella Libros!",
+      "subtitle": "Tu puerta de entrada a un universo de historias. Descubre, explora y enamórate de los libros.",
+      "statLabel1": "Libros Disponibles",
+      "statLabel2": "Lectores Felices",
+      "statLabel3": "Acceso Gratuito"
+    },
+
+    "featuredCollection": {
+      "title": "Colecciones Destacadas",
+      "subtitle": "Selecciones curadas para todos los gustos",
+
+      "featuredBooks": {
+        "title": "Libros Destacados",
+        "description": "Selección cuidadosamente elegida de obras literarias notables",
+        "count": "Colección curada"
+      },
+
+      "newReleases": {
+        "title": "Novedades",
+        "description": "Libros nuevos de autores y editoriales contemporáneos",
+        "count": "Últimas incorporaciones"
+      },
+
+      "awardWinners": {
+        "title": "Ganadores de Premios",
+        "description": "Literatura aclamada por la crítica y galardonada",
+        "count": "Colección premiada"
+      }
+    }
+  },
+
+  "search": {
+    "inputPlaceholder": "Buscar por título, autor, género...",
+    "searchButton": "Buscar",
+    "searchingButton": "Buscando...",
+    "clearButton": "Limpiar",
+    "loadingLabel": "Buscando libros...",
+    "errorMessage": "¡Vaya! Algo salió mal",
+    "errorButtonLabel": "Intentar de nuevo",
+
+    "foundBooks": "Se encontró {{count}} libro",
+    "foundBooks_plural": "Se encontraron {{count}} libros",
+    "noBooksFound": "No se encontraron libros",
+    "searchFor": "para \"{{query}}\"",
+
+    "emptyTitle": "No se encontraron libros",
+    "emptySubtitle": "Intenta ajustar tus términos de búsqueda o explora las sugerencias anteriores.",
+
+    "welcomeTitle": "Comienza tu descubrimiento de libros",
+    "welcomeSubtitle": "Busca por título, autor, género o tema para encontrar tu próximo libro favorito.",
+
+    "suggestions": {
+      "try": "Prueba con:",
+      "fiction": "ficción",
+      "science": "ciencia",
+      "mystery": "misterio",
+      "programming": "programación"
+    }
+  },
+
+  "recommendations": {
+    "title": "Recomendaciones Curadas",
+    "subtitle": "Libros seleccionados especialmente para ti. Descubre nuevos favoritos de nuestras colecciones cuidadosamente elegidas.",
+    "featureTag1": "Personalizado",
+    "featureTag2": "Altamente Valorado",
+    "featureTag3": "Actualizado Regularmente",
+
+    "list": {
+      "title": "Tu Selección Personalizada",
+      "lastUpdated": "Actualizado el",
+      "refreshButton": "Actualizar",
+      "refreshRecommendations": "Actualizar Recomendaciones",
+
+      "loadingLabel": "Descubriendo libros increíbles para ti...",
+      "errorLabel": "No se pudieron cargar las recomendaciones",
+      "emptyTitle": "No hay recomendaciones disponibles",
+      "emptySubtitle": "Estamos teniendo problemas para encontrar recomendaciones en este momento. Por favor, intenta actualizar.",
+      "footerTip": "Consejo Profesional:",
+      "footerTipContent": "Las recomendaciones se actualizan regularmente. ¡Vuelve para nuevos descubrimientos!"
+    }
+  },
+
+  "genres": {
+    "title": "Explora Géneros",
+    "subtitle": "Descubre libros por tus categorías favoritas",
+
+    "fiction": {
+      "name": "Ficción",
+      "description": "Novelas clásicas y contemporáneas"
+    },
+    "mystery": {
+      "name": "Misterio y Thriller",
+      "description": "Historias llenas de suspense"
+    },
+    "scifi": {
+      "name": "Ciencia Ficción",
+      "description": "Mundos futuristas y tecnología"
+    },
+    "fantasy": {
+      "name": "Fantasía",
+      "description": "Mundos mágicos y criaturas"
+    },
+    "romance": {
+      "name": "Romance",
+      "description": "Historias de amor conmovedoras"
+    },
+    "nonfiction": {
+      "name": "No Ficción",
+      "description": "Historias reales y conocimiento"
+    },
+    "history": {
+      "name": "Histórica",
+      "description": "Viaje a través del tiempo"
+    },
+    "biography": {
+      "name": "Biografía",
+      "description": "Historias de vida inspiradoras"
+    },
+
+    "bookPage": {
+      "emptyTitle": "Género no encontrado",
+      "backButton": "Volver a Géneros",
+      "loadingLabel": "Cargando libros de {{genre}}...",
+      "errorTitle": "No se pudieron cargar los libros"
+    }
+  },
+
+  "favorites": {
+    "emptyTitle": "Aún no hay favoritos",
+    "emptySubtitle": "¡Comienza a explorar libros y agrégalos a tus favoritos!",
+    "emptyButton": "Descubrir Libros",
+    "loadingLabel": "Cargando tus libros favoritos...",
+    "warningLabel": "libros no se pudieron cargar",
+    "errorTitle": "No se cargaron libros",
+    "errorSubtitle": "No pudimos cargar ninguno de tus libros favoritos. Esto podría ser un problema temporal.",
+
+    "hero": {
+      "title": "Tus Favoritos",
+      "subtitle": "Libros que has amado y guardado para después",
+      "subtitleCollectionOf": "Tu colección personal de {{count}} libros amados"
+    }
+  },
+
+  "bookCard": {
+    "noCover": "Sin portada",
+    "published": "Publicado",
+    "publisher": "Editorial",
+    "pages": "páginas",
+    "genres": "Géneros",
+    "preview": "Vista previa",
+    "moreInfo": "Más información"
+  },
+
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "tryAgain": "Intentar de nuevo",
+    "back": "Atrás",
+    "backToHome": "Volver al Inicio",
+    "readMore": "Leer Más",
+    "addToFavorites": "Añadir a Favoritos",
+    "removeFromFavorites": "Quitar de Favoritos"
+  },
+
+  "loading": {
+    "discoveringBooks": "Descubriendo libros notables...",
+    "loadingNewReleases": "Cargando novedades...",
+    "loadingAwardWinners": "Cargando libros galardonados..."
+  },
+
+  "errors": {
+    "unableToLoadBooks": "No se pudieron cargar los libros",
+    "httpError": "¡Error HTTP! Estado: {{status}}",
+    "requestTimeout": "Tiempo de espera agotado",
+    "serviceUnavailable": "Servicio temporalmente no disponible",
+    "networkError": "Error de red"
+  }
+}

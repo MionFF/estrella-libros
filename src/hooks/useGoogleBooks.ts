@@ -18,84 +18,52 @@ export const useGoogleBooks = (): UseGoogleBooksReturn => {
     setError(null)
 
     const timeoutId = setTimeout(() => {
-      setError('Request timeout - taking longer than expected')
+      setError('Request timeout')
       setLoading(false)
-    }, 7000)
+    }, 10000)
 
     try {
-      const subQueries = [query, `${query} fiction`, `${query} novel`, `${query} literature`]
+      // 🔥 ВРЕМЕННО: ТОЛЬКО ОДИН ЗАПРОС вместо 4!
+      const response = await fetch(
+        `${BASE_URL}?q=${encodeURIComponent(query)}&maxResults=${maxResults}&key=${API_KEY}`,
+      )
 
-      const promises = subQueries.map(async (subQuery, index) => {
-        await new Promise(resolve => setTimeout(resolve, index * 200))
-
-        const response = await fetch(
-          `${BASE_URL}?q=${encodeURIComponent(subQuery)}&maxResults=10&key=${API_KEY}`,
-        )
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
-        }
-
-        const data = await response.json()
-
-        if (data.items) {
-          const formattedBooks: Book[] = data.items.map((item: any) => {
-            const volumeInfo = item.volumeInfo
-            return {
-              id: item.id,
-              title: volumeInfo.title || 'No title available',
-              authors: volumeInfo.authors || ['Unknown Author'],
-              description: volumeInfo.description,
-              coverUrl:
-                volumeInfo.imageLinks?.thumbnail?.replace('http://', 'https://') ||
-                volumeInfo.imageLinks?.smallThumbnail?.replace('http://', 'https://'),
-              publishedYear: volumeInfo.publishedDate?.substring(0, 4),
-              publisher: volumeInfo.publisher,
-              pageCount: volumeInfo.pageCount,
-              averageRating: volumeInfo.averageRating,
-              ratingsCount: volumeInfo.ratingsCount,
-              categories: volumeInfo.categories,
-              language: volumeInfo.language,
-              previewLink: volumeInfo.previewLink,
-              infoLink: volumeInfo.infoLink,
-            }
-          })
-          return formattedBooks
-        }
-        return []
-      })
-
-      const results = await Promise.allSettled(promises)
-      clearTimeout(timeoutId)
-
-      // Фильтруем успешные результаты
-      const successfulResults = results
-        .filter((result): result is PromiseFulfilledResult<Book[]> => result.status === 'fulfilled')
-        .map(result => result.value)
-
-      // Считаем неудачные запросы
-      const failedCount = results.filter(result => result.status === 'rejected').length
-
-      // 🔥 Показываем warning если есть неудачи, но НЕ бросаем ошибку
-      if (failedCount > 0 && successfulResults.length > 0) {
-        console.warn(`${failedCount} sub-queries failed but continuing with available data`)
-        // Можно показать пользователю информативное сообщение
-        setError(
-          `Note: Some books couldn't be loaded, but we found ${
-            successfulResults.flat().length
-          } books`,
-        )
-      } else if (failedCount === subQueries.length) {
-        // Только если ВСЕ запросы провалились - тогда показываем ошибку
-        throw new Error('All requests failed. Service may be temporarily unavailable.')
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
       }
 
-      const uniqueBooks = successfulResults
-        .flat()
-        .filter((book, index, self) => index === self.findIndex(b => b.id === book.id))
+      const data = await response.json()
+      clearTimeout(timeoutId)
 
-      setBooks(uniqueBooks.slice(0, maxResults))
-      setHasMore(uniqueBooks.length >= maxResults)
+      if (data.items) {
+        const formattedBooks: Book[] = data.items.map((item: any) => {
+          const volumeInfo = item.volumeInfo
+          return {
+            id: item.id,
+            title: volumeInfo.title || 'No title available',
+            authors: volumeInfo.authors || ['Unknown Author'],
+            description: volumeInfo.description,
+            coverUrl:
+              volumeInfo.imageLinks?.thumbnail?.replace('http://', 'https://') ||
+              volumeInfo.imageLinks?.smallThumbnail?.replace('http://', 'https://'),
+            publishedYear: volumeInfo.publishedDate?.substring(0, 4),
+            publisher: volumeInfo.publisher,
+            pageCount: volumeInfo.pageCount,
+            averageRating: volumeInfo.averageRating,
+            ratingsCount: volumeInfo.ratingsCount,
+            categories: volumeInfo.categories,
+            language: volumeInfo.language,
+            previewLink: volumeInfo.previewLink,
+            infoLink: volumeInfo.infoLink,
+          }
+        })
+
+        setBooks(formattedBooks)
+        setHasMore(formattedBooks.length >= maxResults)
+      } else {
+        setBooks([])
+        setHasMore(false)
+      }
     } catch (err) {
       clearTimeout(timeoutId)
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'

@@ -3,11 +3,14 @@ import { useGoogleBooks } from '../../../hooks/useGoogleBooks'
 import BookCard from '../../../features/components/BookCard/BookCard'
 import Loader from '../../../shared/Loader/Loader'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 export default function AwardWinners() {
   const { books, loading, error, searchBooks } = useGoogleBooks()
   const AWARD_WINNERS_QUERY = 'award winning prize literature'
   const navigate = useNavigate()
+
+  const { t } = useTranslation('common')
 
   useEffect(() => {
     searchBooks(AWARD_WINNERS_QUERY, 40)
@@ -44,13 +47,17 @@ export default function AwardWinners() {
         </button>
 
         <div className='award-winners-header__content'>
-          <h1 className='award-winners-title'>🏆 Award Winners</h1>
+          <h1 className='award-winners-title'>
+            🏆 {t('home.featuredCollection.awardWinners.title')}
+          </h1>
           <p className='award-winners-subtitle'>
-            Critically acclaimed and prize-winning literature
+            {t('home.featuredCollection.awardWinners.description')}
           </p>
           {!loading && books.length > 0 && (
             <div className='award-winners-stats'>
-              <span className='award-winners-count'>Featured collection</span>
+              <span className='award-winners-count'>
+                {t('home.featuredCollection.awardWinners.count')}
+              </span>
             </div>
           )}
         </div>
@@ -60,7 +67,7 @@ export default function AwardWinners() {
         {loading ? (
           <div className='award-winners-loading'>
             <Loader />
-            <p>Loading award-winning books...</p>
+            <p>{t('loading.loadingAwardWinners')}</p>
           </div>
         ) : error ? (
           <div className='award-winners-error'>
@@ -70,13 +77,13 @@ export default function AwardWinners() {
               <p>{error}</p>
               <div className='award-winners-error__actions'>
                 <button onClick={handleRetry} className='award-winners-error__button'>
-                  Try Again
+                  {t('common.tryAgain')}
                 </button>
                 <button
                   onClick={handleBack}
                   className='award-winners-error__button award-winners-error__button--secondary'
                 >
-                  Back to Home
+                  {t('common.backToHome')}
                 </button>
               </div>
             </div>
@@ -92,13 +99,13 @@ export default function AwardWinners() {
                 <p>We couldn't find any books matching your criteria.</p>
                 <div className='award-winners-empty__actions'>
                   <button onClick={handleRetry} className='award-winners-empty__button'>
-                    Try Again
+                    {t('common.tryAgain')}
                   </button>
                   <button
                     onClick={handleBack}
                     className='award-winners-empty__button award-winners-empty__button--secondary'
                   >
-                    Back to Home
+                    {t('common.backToHome')}
                   </button>
                 </div>
               </div>

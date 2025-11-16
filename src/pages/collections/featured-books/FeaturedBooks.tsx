@@ -3,11 +3,14 @@ import { useGoogleBooks } from '../../../hooks/useGoogleBooks'
 import { useNavigate } from 'react-router-dom'
 import BookCard from '../../../features/components/BookCard/BookCard'
 import Loader from '../../../shared/Loader/Loader'
+import { useTranslation } from 'react-i18next'
 
 export default function FeaturedBooks() {
   const { books, loading, error, searchBooks } = useGoogleBooks()
   const FEATURED_BOOKS_QUERY = 'fiction novel literature'
   const navigate = useNavigate()
+
+  const { t } = useTranslation('common')
 
   useEffect(() => {
     searchBooks(FEATURED_BOOKS_QUERY, 40)
@@ -44,13 +47,17 @@ export default function FeaturedBooks() {
         </button>
 
         <div className='featured-books-header__content'>
-          <h1 className='featured-books-title'>📖 Featured Books</h1>
+          <h1 className='featured-books-title'>
+            📖 {t('home.featuredCollection.featuredBooks.title')}
+          </h1>
           <p className='featured-books-subtitle'>
-            Handpicked selection of remarkable literary works
+            {t('home.featuredCollection.featuredBooks.description')}
           </p>
           {!loading && books.length > 0 && (
             <div className='featured-books-stats'>
-              <span className='featured-books-count'>Featured collection</span>
+              <span className='featured-books-count'>
+                {t('home.featuredCollection.featuredBooks.count')}
+              </span>
             </div>
           )}
         </div>
@@ -60,7 +67,7 @@ export default function FeaturedBooks() {
         {loading ? (
           <div className='featured-books-loading'>
             <Loader />
-            <p>Discovering remarkable books...</p>
+            <p>{t('loading.discoveringBooks')}</p>
           </div>
         ) : error ? (
           <div className='featured-books-error'>
@@ -70,13 +77,13 @@ export default function FeaturedBooks() {
               <p>{error}</p>
               <div className='featured-books-error__actions'>
                 <button onClick={handleRetry} className='featured-books-error__button'>
-                  Try Again
+                  {t('common.tryAgain')}
                 </button>
                 <button
                   onClick={handleBack}
                   className='featured-books-error__button featured-books-error__button--secondary'
                 >
-                  Back to Home
+                  {t('common.backToHome')}
                 </button>
               </div>
             </div>
@@ -92,13 +99,13 @@ export default function FeaturedBooks() {
                 <p>We couldn't find any books matching your criteria.</p>
                 <div className='featured-books-empty__actions'>
                   <button onClick={handleRetry} className='featured-books-empty__button'>
-                    Try Again
+                    {t('common.tryAgain')}
                   </button>
                   <button
                     onClick={handleBack}
                     className='featured-books-empty__button featured-books-empty__button--secondary'
                   >
-                    Back to Home
+                    {t('common.backToHome')}
                   </button>
                 </div>
               </div>

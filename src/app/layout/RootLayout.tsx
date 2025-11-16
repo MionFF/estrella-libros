@@ -2,16 +2,21 @@ import { NavLink, Outlet } from 'react-router-dom'
 import Header from '../../widgets/Header/Header'
 import Footer from '../../widgets/Footer/Footer'
 import ScrollTopButton from '../../features/ScrollTopButton/ScrollTopButton'
+import LanguageMenu from '../../features/components/LanguageMenu/LanguageMenu'
+import { useTranslation } from 'react-i18next'
 
 export default function RootLayout() {
+  const { t } = useTranslation('common')
+
   return (
     <>
       <Header>
-        <NavLink to={'favorites'}>Favorites</NavLink>
-        <NavLink to={'genres'}>Gengres</NavLink>
-        <NavLink to={'recommendations'}>Recommendations</NavLink>
-        <NavLink to={'search'}>Search</NavLink>
-        <NavLink to={'/'}>Home</NavLink>
+        <LanguageMenu />
+        <NavLink to={'favorites'}>{t('header.favorites')}</NavLink>
+        <NavLink to={'genres'}>{t('header.genres')}</NavLink>
+        <NavLink to={'recommendations'}>{t('header.recommendations')}</NavLink>
+        <NavLink to={'search'}>{t('header.search')}</NavLink>
+        <NavLink to={'/'}>{t('header.home')}</NavLink>
       </Header>
 
       <main>

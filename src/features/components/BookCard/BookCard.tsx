@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { Book } from '../../types'
 import FavoriteButton from '../FavoriteButton/FavoriteButton'
 
@@ -6,6 +7,8 @@ interface RecommendationsBookCardProps {
 }
 
 export default function BookCard({ book }: RecommendationsBookCardProps) {
+  const { t } = useTranslation('common')
+
   return (
     <article className='book-card'>
       {/* Обложка книги */}
@@ -13,7 +16,7 @@ export default function BookCard({ book }: RecommendationsBookCardProps) {
         {book.coverUrl ? (
           <img src={book.coverUrl} alt={book.title} className='book-card__img' loading='lazy' />
         ) : (
-          <div className='book-card__no-image'>No Cover</div>
+          <div className='book-card__no-image'>{t('bookCard.noCover')}</div>
         )}
       </div>
 
@@ -29,10 +32,18 @@ export default function BookCard({ book }: RecommendationsBookCardProps) {
         <p className='book-card__authors'>by {book.authors.join(', ')}</p>
 
         {/* Год издания */}
-        {book.publishedYear && <p className='book-card__year'>Published: {book.publishedYear}</p>}
+        {book.publishedYear && (
+          <p className='book-card__year'>
+            {t('bookCard.published')}: {book.publishedYear}
+          </p>
+        )}
 
         {/* Издатель */}
-        {book.publisher && <p className='book-card__publisher'>Publisher: {book.publisher}</p>}
+        {book.publisher && (
+          <p className='book-card__publisher'>
+            {t('bookCard.publisher')}: {book.publisher}
+          </p>
+        )}
 
         {/* Рейтинг */}
         {book.averageRating && (
@@ -43,12 +54,16 @@ export default function BookCard({ book }: RecommendationsBookCardProps) {
         )}
 
         {/* Страницы */}
-        {book.pageCount && <p className='book-card__pages'>{book.pageCount} pages</p>}
+        {book.pageCount && (
+          <p className='book-card__pages'>
+            {book.pageCount} {t('bookCard.pages')}
+          </p>
+        )}
 
         {/* Жанры/категории */}
         {book.categories && book.categories.length > 0 && (
           <div className='book-card__categories'>
-            <strong>Genres:</strong>
+            <strong>{t('bookCard.genres')}:</strong>
             <div className='book-card__tags'>
               {book.categories.slice(0, 3).map((category, index) => (
                 <span key={index} className='book-card__tag'>
@@ -74,12 +89,12 @@ export default function BookCard({ book }: RecommendationsBookCardProps) {
         <div className='book-card__links'>
           {book.previewLink && (
             <a href={book.previewLink} target='_blank' rel='noopener noreferrer'>
-              Preview
+              {t('bookCard.preview')}
             </a>
           )}
           {book.infoLink && (
             <a href={book.infoLink} target='_blank' rel='noopener noreferrer'>
-              More Info
+              {t('bookCard.moreInfo')}
             </a>
           )}
         </div>
