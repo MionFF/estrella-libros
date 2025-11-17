@@ -173,8 +173,15 @@
     "publisher": "Издатель",
     "pages": "страниц",
     "genres": "Жанры",
+    "details": "Подробнее",
     "preview": "Предпросмотр",
-    "moreInfo": "Подробнее"
+    "moreInfo": "Подробности",
+
+    "detailsModal": {
+      "description": "Описание",
+      "addToFavs": "В избранное",
+      "inFavorites": "В избранном"
+    }
   },
 
   "common": {
@@ -192,13 +199,5 @@
     "discoveringBooks": "Ищем замечательные книги...",
     "loadingNewReleases": "Загружаем новинки...",
     "loadingAwardWinners": "Загружаем книги-лауреаты..."
-  },
-
-  "errors": {
-    "unableToLoadBooks": "Не удалось загрузить книги",
-    "httpError": "Ошибка HTTP! Статус: {{status}}",
-    "requestTimeout": "Превышено время ожидания",
-    "serviceUnavailable": "Сервис временно недоступен",
-    "networkError": "Ошибка сети"
   }
 }

@@ -81,6 +81,9 @@ export const useGoogleBooks = (): UseGoogleBooksReturn => {
   }, [])
 
   const getBookById = useCallback(async (bookId: string): Promise<Book | null> => {
+    setLoading(true)
+    setError(null)
+
     try {
       let response = await fetch(`${BASE_URL}/${bookId}?key=${API_KEY}`)
 
@@ -123,6 +126,8 @@ export const useGoogleBooks = (): UseGoogleBooksReturn => {
     } catch (err) {
       console.warn(`Network error for book ${bookId}:`, err)
       return null
+    } finally {
+      setLoading(false)
     }
   }, [])
 

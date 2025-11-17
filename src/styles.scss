@@ -21,6 +21,8 @@
 @use '../src/features/components/FavoriteButton/FavoriteButton';
 @use '../src/features/components/FavoritesHero/FavoritesHero';
 @use '../src/features/components/LanguageMenu/LanguageMenu';
+@use '../src/features/components/BookDetailsModal/BookDetailsModal';
+@use '../src/features/components/BookModalSkeleton/BookModalSkeleton';
 
 :root {
   --container-width: 1200px;

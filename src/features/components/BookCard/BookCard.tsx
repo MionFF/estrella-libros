@@ -1,13 +1,27 @@
 import { useTranslation } from 'react-i18next'
 import type { Book } from '../../types'
 import FavoriteButton from '../FavoriteButton/FavoriteButton'
+import { useState } from 'react'
+import BookModal from '../BookDetailsModal/BookDetailsModal'
 
 interface RecommendationsBookCardProps {
   book: Book
 }
 
 export default function BookCard({ book }: RecommendationsBookCardProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedBookId, setSelectedBookId] = useState<string | null>(null)
   const { t } = useTranslation('common')
+
+  const openModal = () => {
+    setSelectedBookId(book.id)
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setSelectedBookId(null)
+  }
 
   return (
     <article className='book-card'>
@@ -85,6 +99,13 @@ export default function BookCard({ book }: RecommendationsBookCardProps) {
           </div>
         )}
 
+        {/* Детальная страница */}
+        <div className='book-card__actions'>
+          <button onClick={openModal} className='book-card__details-btn'>
+            {t('bookCard.details')}
+          </button>
+        </div>
+
         {/* Ссылки */}
         <div className='book-card__links'>
           {book.previewLink && (
@@ -98,6 +119,11 @@ export default function BookCard({ book }: RecommendationsBookCardProps) {
             </a>
           )}
         </div>
+
+        {/* Модалка */}
+        {isModalOpen && selectedBookId && (
+          <BookModal bookId={selectedBookId} isOpen={isModalOpen} onClose={closeModal} />
+        )}
       </div>
     </article>
   )

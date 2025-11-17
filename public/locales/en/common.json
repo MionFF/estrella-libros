@@ -172,8 +172,15 @@
     "publisher": "Publisher",
     "pages": "pages",
     "genres": "Genres",
+    "details": "Details",
     "preview": "Preview",
-    "moreInfo": "More Info"
+    "moreInfo": "More Info",
+
+    "detailsModal": {
+      "description": "Description",
+      "addToFavs": "Add to Favorites",
+      "inFavorites": "In Favorites"
+    }
   },
 
   "common": {
@@ -191,13 +198,5 @@
     "discoveringBooks": "Discovering remarkable books...",
     "loadingNewReleases": "Loading new releases...",
     "loadingAwardWinners": "Loading award-winning books..."
-  },
-
-  "errors": {
-    "unableToLoadBooks": "Unable to Load Books",
-    "httpError": "HTTP error! Status: {{status}}",
-    "requestTimeout": "Request timeout",
-    "serviceUnavailable": "Service temporarily unavailable",
-    "networkError": "Network error"
   }
 }

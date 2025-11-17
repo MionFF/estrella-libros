@@ -172,8 +172,15 @@
     "publisher": "Editorial",
     "pages": "páginas",
     "genres": "Géneros",
+    "details": "Detalles",
     "preview": "Vista previa",
-    "moreInfo": "Más información"
+    "moreInfo": "Más información",
+
+    "detailsModal": {
+      "description": "Descripción",
+      "addToFavs": "Añadir a favoritos",
+      "inFavorites": "En favoritos"
+    }
   },
 
   "common": {
@@ -191,13 +198,5 @@
     "discoveringBooks": "Descubriendo libros notables...",
     "loadingNewReleases": "Cargando novedades...",
     "loadingAwardWinners": "Cargando libros galardonados..."
-  },
-
-  "errors": {
-    "unableToLoadBooks": "No se pudieron cargar los libros",
-    "httpError": "¡Error HTTP! Estado: {{status}}",
-    "requestTimeout": "Tiempo de espera agotado",
-    "serviceUnavailable": "Servicio temporalmente no disponible",
-    "networkError": "Error de red"
   }
 }
