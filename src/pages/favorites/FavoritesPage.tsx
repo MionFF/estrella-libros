@@ -63,7 +63,7 @@ export default function FavoritesPage() {
             <h2>{t('favorites.emptyTitle')}</h2>
             <p>{t('favorites.emptySubtitle')}</p>
             <button onClick={() => navigate('/search')} className='favorites-empty__button'>
-              {t('favorites.button')}
+              {t('search.searchButton')}
             </button>
           </div>
         </div>

@@ -10,8 +10,12 @@ import AwardWinners from '../pages/collections/award-winners/AwardWinners'
 import Genres from '../pages/genres/Genres/Gengres'
 import GenreBookPage from '../pages/genres/GenreBookPage/GenreBookPage'
 import FavoritesPage from '../pages/favorites/FavoritesPage'
+import { useEffect } from 'react'
 
 export default function App() {
+  useEffect(() => {
+    console.log('API Key at build time:', import.meta.env.VITE_GOOGLE_BOOKS_API_KEY)
+  }, [])
   return (
     <BrowserRouter>
       <Routes>
