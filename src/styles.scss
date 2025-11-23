@@ -23,6 +23,7 @@
 @use '../src/features/components/LanguageMenu/LanguageMenu';
 @use '../src/features/components/BookDetailsModal/BookDetailsModal';
 @use '../src/features/components/BookModalSkeleton/BookModalSkeleton';
+@use '../src/features/InstallPrompt/InstallPrompt';
 
 :root {
   --container-width: 1200px;
