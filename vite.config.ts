@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+      includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png', 'screenshot-desktop.png', 'screenshot-mobile.png'],
       manifest: {
         name: 'Estrella Libros',
         short_name: 'Estrella',
