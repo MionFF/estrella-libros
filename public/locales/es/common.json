@@ -191,7 +191,11 @@
     "backToHome": "Volver al Inicio",
     "readMore": "Leer Más",
     "addToFavorites": "Añadir a Favoritos",
-    "removeFromFavorites": "Quitar de Favoritos"
+    "removeFromFavorites": "Quitar de Favoritos",
+    "offline": "Sin conexión a internet. Algunas funciones limitadas.",
+    "offlineError": "Estás desconectado. Conéctate a internet para buscar libros.",
+    "requestTimeout": "Tiempo de espera agotado. Inténtalo de nuevo.",
+    "unknownError": "Ocurrió un error desconocido"
   },
 
   "loading": {

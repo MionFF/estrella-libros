@@ -191,7 +191,11 @@
     "backToHome": "Back to Home",
     "readMore": "Read More",
     "addToFavorites": "Add to Favorites",
-    "removeFromFavorites": "Remove from Favorites"
+    "removeFromFavorites": "Remove from Favorites",
+    "offline": "No internet connection. Some features may be limited.",
+    "offlineError": "You are offline. Please connect to the internet to search books.",
+    "requestTimeout": "Request timeout. Please try again.",
+    "unknownError": "Unknown error occurred"
   },
 
   "loading": {

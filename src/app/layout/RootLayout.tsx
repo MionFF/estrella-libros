@@ -5,6 +5,7 @@ import ScrollTopButton from '../../features/ScrollTopButton/ScrollTopButton'
 import InstallPrompt from '../../features/InstallPrompt/InstallPrompt'
 import LanguageMenu from '../../features/components/LanguageMenu/LanguageMenu'
 import { useTranslation } from 'react-i18next'
+import OfflineBanner from '../../features/components/OfflineBanner/OfflineBanner'
 
 export default function RootLayout() {
   const { t } = useTranslation('common')
@@ -19,6 +20,8 @@ export default function RootLayout() {
         <NavLink to={'search'}>{t('header.search')}</NavLink>
         <NavLink to={'/'}>{t('header.home')}</NavLink>
       </Header>
+
+      <OfflineBanner />
 
       <main>
         <Outlet />

@@ -1,0 +1,58 @@
+.offline-banner {
+  position: fixed;
+  top: 57px;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); // 👈 Градиент как в Install Prompt
+  color: white;
+  padding: 10px 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  backdrop-filter: blur(8px); // Размытие фона
+
+  &-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center; // По центру
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.01em; // Как в Install Prompt
+
+    svg {
+      flex-shrink: 0;
+      opacity: 0.9; // Чуть прозрачнее
+    }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Адаптив
+@media (max-width: 768px) {
+  .offline-banner {
+    padding: 8px 16px;
+
+    &-content {
+      font-size: 13px;
+      gap: 8px;
+    }
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
