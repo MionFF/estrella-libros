@@ -73,6 +73,14 @@ export const useGoogleBooks = (): UseGoogleBooksReturn => {
       }
     } catch (err) {
       clearTimeout(timeoutId)
+
+      // Offline-проверка
+      if (!navigator.onLine) {
+        setError('You are offline. Please connect to the internet to search books.')
+        setBooks([])
+        return
+      }
+
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
       setError(errorMessage)
       setBooks([])

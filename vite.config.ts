@@ -3,6 +3,11 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  build: {
+    target: 'es2015', // Для совместимости
+    minify: 'terser',
+    cssMinify: true
+  },
   plugins: [
     react(),
     VitePWA({
@@ -44,7 +49,7 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,json}'],
         cleanupOutdatedCaches: true, // автоматическая очистка старых версий кеша
         runtimeCaching: [
           {
@@ -69,6 +74,20 @@ export default defineConfig({
               expiration: {
                 maxEntries: 100,
                 maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          {
+            urlPattern: /\/locales\/[a-z]{2}\/.*\.json$/i, // Путь к твоим переводам
+            handler: 'CacheFirst', // Переводы редко меняются
+            options: {
+              cacheName: 'i18n-translations',
+              expiration: {
+                maxEntries: 20,
+                maxAgeSeconds: 60 * 60 * 24 * 7 // 7 дней
               },
               cacheableResponse: {
                 statuses: [0, 200]
