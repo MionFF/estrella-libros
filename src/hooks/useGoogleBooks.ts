@@ -24,6 +24,16 @@ export const useGoogleBooks = (): UseGoogleBooksReturn => {
     async (query: string, maxResults: number = 20) => {
       if (!query.trim()) return
 
+      if (loading) {
+        console.warn('Request already in progress, skipping...')
+        return
+      }
+
+      if (!navigator.onLine) {
+        setError(t('common.offlineError'))
+        return
+      }
+
       setLoading(true)
       setError(null)
 
@@ -91,7 +101,7 @@ export const useGoogleBooks = (): UseGoogleBooksReturn => {
         setLoading(false)
       }
     },
-    [t],
+    [t, loading],
   )
 
   const clearBooks = useCallback(() => {

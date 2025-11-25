@@ -146,7 +146,9 @@
       "emptyTitle": "Genre not found",
       "backButton": "Back to Genres",
       "loadingLabel": "Loading {{genre}} books...",
-      "errorTitle": "Unable to Load Books"
+      "errorTitle": "Unable to Load Books",
+      "emptyBooksTitle": "No books found",
+      "emptyBooksSubtitle": "Try refreshing or check your connection."
     }
   },
 

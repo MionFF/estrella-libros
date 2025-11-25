@@ -146,7 +146,9 @@
       "emptyTitle": "Género no encontrado",
       "backButton": "Volver a Géneros",
       "loadingLabel": "Cargando libros de {{genre}}...",
-      "errorTitle": "No se pudieron cargar los libros"
+      "errorTitle": "No se pudieron cargar los libros",
+      "emptyBooksTitle": "No se encontraron libros",
+      "emptyBooksSubtitle": "Intenta actualizar o verifica tu conexión."
     }
   },
 

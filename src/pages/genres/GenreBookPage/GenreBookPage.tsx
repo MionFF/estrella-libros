@@ -1,6 +1,6 @@
 import { useGoogleBooks } from '../../../hooks/useGoogleBooks'
 import BookCard from '../../../features/components/BookCard/BookCard'
-import { useEffect, useCallback } from 'react'
+import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Loader from '../../../shared/Loader/Loader'
 import { GENRES } from '../../../constants/genres'
@@ -20,22 +20,23 @@ export default function GenreBookPage() {
 
   const genre = localizedGenres.find(g => g.id === genreId)
 
-  // 🔥 ИСПРАВЛЕНИЕ: используем useCallback для стабильной функции
-  const searchGenreBooks = useCallback(() => {
-    if (genre) {
-      searchBooks(genre.query, 40)
-    }
-  }, [genre, searchBooks])
-
   useEffect(() => {
-    // 🔥 Добавь проверку, чтобы не запускать при каждом рендере
-    if (genre && !loading && books.length === 0) {
+    if (!genreId || !genre) return // защита от undefined
+
+    if (books.length === 0 && !loading && !error) {
       searchBooks(genre.query, 40)
     }
-  }, [genre]) // Только при смене жанра
+    // eslint-disable-next-line
+  }, [genreId])
 
   const handleBack = () => {
     navigate('/genres')
+  }
+
+  const handleRetry = () => {
+    if (genre) {
+      searchBooks(genre.query, 40)
+    }
   }
 
   if (!genre) {
@@ -73,14 +74,22 @@ export default function GenreBookPage() {
               <div className='genre-books-error__icon'>😔</div>
               <h3>{t('genres.bookPage.errorTitle')}</h3>
               <p>{error}</p>
-              <button onClick={searchGenreBooks}>{t('common.tryAgain')}</button>
+              <button onClick={handleRetry}>{t('common.tryAgain')}</button>
             </div>
           </div>
-        ) : (
+        ) : books.length > 0 ? (
           <div className='genre-books-list'>
             {books.map(book => (
               <BookCard key={book.id} book={book} />
             ))}
+          </div>
+        ) : (
+          // Fallback для пустого состояния
+          <div className='genre-books-empty'>
+            <div className='genre-books-empty__icon'>📚</div>
+            <h3>{t('genres.bookPage.emptyBooksTitle')}</h3>
+            <p>{t('genres.bookPage.emptyBooksSubtitle')}</p>
+            <button onClick={handleRetry}>{t('common.tryAgain')}</button>
           </div>
         )}
       </div>
