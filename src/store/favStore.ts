@@ -25,7 +25,13 @@ const createFavoritesSlice: StateCreator<
   toggle: id =>
     set(state => {
       const next = new Set(state.ids)
-      next.has(id) ? next.delete(id) : next.add(id)
+
+      if (next.has(id)) {
+        next.delete(id)
+      } else {
+        next.add(id)
+      }
+
       return { ids: next }
     }),
   isFavorite: id => get().ids.has(id),
