@@ -26,3 +26,30 @@ export type UseGoogleBooksReturn = {
   hasMore: boolean
   getBookById: (bookId: string) => Promise<Book | null>
 }
+
+export type GoogleBooksVolume = {
+  id: string
+  volumeInfo: {
+    title?: string
+    authors?: string[]
+    description?: string
+    imageLinks?: {
+      thumbnail?: string
+      smallThumbnail?: string
+    }
+    publishedDate?: string
+    publisher?: string
+    pageCount?: number
+    averageRating?: number
+    ratingsCount?: number
+    categories?: string[]
+    language?: string
+    previewLink?: string
+    infoLink?: string
+  }
+}
+
+export type GoogleBooksResponse = {
+  items?: GoogleBooksVolume[]
+  totalItems: number
+}

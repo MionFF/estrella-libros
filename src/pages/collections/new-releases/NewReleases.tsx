@@ -14,6 +14,7 @@ export default function NewReleases() {
 
   useEffect(() => {
     searchBooks(NEW_RELEASES_QUERY, 40)
+    // eslint-disable-next-line
   }, [])
 
   const handleRetry = () => {

@@ -14,6 +14,7 @@ export default function FeaturedBooks() {
 
   useEffect(() => {
     searchBooks(FEATURED_BOOKS_QUERY, 40)
+    // eslint-disable-next-line
   }, [])
 
   const handleRetry = () => {

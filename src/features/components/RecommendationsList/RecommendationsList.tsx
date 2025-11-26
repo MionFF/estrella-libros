@@ -19,6 +19,7 @@ export default function RecommendationsList() {
         year: 'numeric',
       }),
     )
+    // eslint-disable-next-line
   }, [])
 
   const handleRefresh = () => {

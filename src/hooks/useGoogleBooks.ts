@@ -1,5 +1,10 @@
 import { useState, useCallback } from 'react'
-import type { Book, UseGoogleBooksReturn } from '../features/types'
+import type {
+  Book,
+  UseGoogleBooksReturn,
+  GoogleBooksResponse,
+  GoogleBooksVolume,
+} from '../features/types'
 import { cleanCategories, stripHtmlTags } from '../utils/htmlSanitizer'
 import { useTranslation } from 'react-i18next'
 
@@ -43,7 +48,7 @@ export const useGoogleBooks = (): UseGoogleBooksReturn => {
       }, 10000)
 
       try {
-        // 🔥 ВРЕМЕННО: ТОЛЬКО ОДИН ЗАПРОС вместо 4!
+        // ТОЛЬКО ОДИН ЗАПРОС вместо 4!
         const response = await fetch(
           `${BASE_URL}?q=${encodeURIComponent(query)}&maxResults=${maxResults}&key=${API_KEY}`,
         )
@@ -52,11 +57,11 @@ export const useGoogleBooks = (): UseGoogleBooksReturn => {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
 
-        const data = await response.json()
+        const data: GoogleBooksResponse = await response.json()
         clearTimeout(timeoutId)
 
         if (data.items) {
-          const formattedBooks: Book[] = data.items.map((item: any) => {
+          const formattedBooks: Book[] = data.items.map((item: GoogleBooksVolume) => {
             const volumeInfo = item.volumeInfo
             return {
               id: item.id,
@@ -127,7 +132,7 @@ export const useGoogleBooks = (): UseGoogleBooksReturn => {
         return null
       }
 
-      const data = await response.json()
+      const data: GoogleBooksVolume = await response.json()
 
       if (!data.volumeInfo) {
         console.warn(`No volumeInfo for book ${bookId}`)

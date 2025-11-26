@@ -20,7 +20,7 @@ export default function LanguageMenu() {
     [],
   )
 
-  const current = (i18n.language || 'en' || 'es').split('-')[0] as Lang['code']
+  const current = (i18n.language || 'en').split('-')[0] as Lang['code']
   const activeIndex = Math.max(
     0,
     langs.findIndex(l => l.code === current),

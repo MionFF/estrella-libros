@@ -14,6 +14,7 @@ export default function AwardWinners() {
 
   useEffect(() => {
     searchBooks(AWARD_WINNERS_QUERY, 40)
+    // eslint-disable-next-line
   }, [])
 
   const handleRetry = () => {
