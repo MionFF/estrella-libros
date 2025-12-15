@@ -37,19 +37,28 @@
       "featuredBooks": {
         "title": "Featured Books",
         "description": "Handpicked selection of remarkable literary works",
-        "count": "Curated collection"
+        "tagline": "Curated collection",
+        "unableToLoad": "Unable to Load Books",
+        "noBooksFound": "No Books Found",
+        "errorDescription": "We couldn't find any books matching your criteria."
       },
 
       "newReleases": {
         "title": "New Releases",
         "description": "Fresh books from contemporary authors and publishers",
-        "count": "Latest additions"
+        "tagline": "Latest additions",
+        "unableToLoad": "Unable to Load New Releases",
+        "noBooksFound": "No New Releases Found",
+        "errorDescription": "We couldn't find any new books matching your criteria."
       },
 
       "awardWinners": {
         "title": "Award Winners",
         "description": "Critically acclaimed and prize-winning literature",
-        "count": "Prize collection"
+        "tagline": "Prize collection",
+        "unableToLoad": "Unable to Load New Releases",
+        "noBooksFound": "No New Releases Found",
+        "errorDescription": "We couldn't find any new books matching your criteria."
       }
     }
   },
@@ -204,5 +213,12 @@
     "discoveringBooks": "Discovering remarkable books...",
     "loadingNewReleases": "Loading new releases...",
     "loadingAwardWinners": "Loading award-winning books..."
+  },
+
+  "installPrompt": {
+    "title": "Install Estrella Libros",
+    "subtitle": "Quick access from your device",
+    "installButton": "Install",
+    "closeAriaLabel": "Close install prompt"
   }
 }

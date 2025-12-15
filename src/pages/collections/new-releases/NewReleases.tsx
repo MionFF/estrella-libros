@@ -29,7 +29,7 @@ export default function NewReleases() {
     <div className='new-releases-page'>
       <div className='new-releases-header'>
         {/* Выносим кнопку назад отдельно от контента */}
-        <button onClick={handleBack} className='new-releases-back-btn'>
+        <button onClick={handleBack} className='new-releases-back-btn' aria-label='Go back'>
           <svg
             width='20'
             height='20'
@@ -57,7 +57,7 @@ export default function NewReleases() {
           {!loading && books.length > 0 && (
             <div className='new-releases-stats'>
               <span className='new-releases-count'>
-                {t('home.featuredCollection.newReleases.count')}
+                {t('home.featuredCollection.newReleases.tagline')}
               </span>
             </div>
           )}
@@ -74,7 +74,7 @@ export default function NewReleases() {
           <div className='new-releases-error'>
             <div className='new-releases-error__content'>
               <div className='new-releases-error__icon'>😔</div>
-              <h3>Unable to Load New Releases</h3>
+              <h3>{t('home.featuredCollection.newReleases.unableToLoad')}</h3>
               <p>{error}</p>
               <div className='new-releases-error__actions'>
                 <button onClick={handleRetry} className='new-releases-error__button'>
@@ -96,8 +96,8 @@ export default function NewReleases() {
             ) : (
               <div className='new-releases-empty'>
                 <div className='new-releases-empty__icon'>📚</div>
-                <h3>No New Releases Found</h3>
-                <p>We couldn't find any new books matching your criteria.</p>
+                <h3>{t('home.featuredCollection.newReleases.noBooksFound')}</h3>
+                <p>{t('home.featuredCollection.newReleases.errorDescription')}</p>
                 <button onClick={handleRetry} className='new-releases-empty__button'>
                   {t('common.tryAgain')}
                 </button>

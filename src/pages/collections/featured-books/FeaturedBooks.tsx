@@ -29,7 +29,7 @@ export default function FeaturedBooks() {
     <div className='featured-books-page'>
       <div className='featured-books-header'>
         {/* Выносим кнопку назад отдельно от контента */}
-        <button onClick={handleBack} className='featured-books-back-btn'>
+        <button onClick={handleBack} className='featured-books-back-btn' aria-label='Go back'>
           <svg
             width='20'
             height='20'
@@ -57,7 +57,7 @@ export default function FeaturedBooks() {
           {!loading && books.length > 0 && (
             <div className='featured-books-stats'>
               <span className='featured-books-count'>
-                {t('home.featuredCollection.featuredBooks.count')}
+                {t('home.featuredCollection.featuredBooks.tagline')}
               </span>
             </div>
           )}
@@ -74,7 +74,7 @@ export default function FeaturedBooks() {
           <div className='featured-books-error'>
             <div className='featured-books-error__content'>
               <div className='featured-books-error__icon'>😔</div>
-              <h3>Unable to Load Books</h3>
+              <h3>{t('home.featuredCollection.featuredBooks.unableToLoad')}</h3>
               <p>{error}</p>
               <div className='featured-books-error__actions'>
                 <button onClick={handleRetry} className='featured-books-error__button'>
@@ -96,8 +96,8 @@ export default function FeaturedBooks() {
             ) : (
               <div className='featured-books-empty'>
                 <div className='featured-books-empty__icon'>📚</div>
-                <h3>No Books Found</h3>
-                <p>We couldn't find any books matching your criteria.</p>
+                <h3>{t('home.featuredCollection.featuredBooks.noBooksFound')}</h3>
+                <p>{t('home.featuredCollection.featuredBooks.errorDescription')}</p>
                 <div className='featured-books-empty__actions'>
                   <button onClick={handleRetry} className='featured-books-empty__button'>
                     {t('common.tryAgain')}

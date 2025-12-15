@@ -7,16 +7,9 @@ import type {
 } from '../features/types'
 import { cleanCategories, stripHtmlTags } from '../utils/htmlSanitizer'
 import { useTranslation } from 'react-i18next'
+import { getApiKey, BASE_URL } from '../config/env'
 
-const API_KEY = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY
-const BASE_URL = 'https://www.googleapis.com/books/v1/volumes'
-
-if (!API_KEY) {
-  throw new Error(
-    'VITE_GOOGLE_BOOKS_API_KEY is not defined. ' +
-      'Make sure you have .env file with VITE_GOOGLE_BOOKS_API_KEY variable.',
-  )
-}
+const API_KEY = getApiKey()
 
 export const useGoogleBooks = (): UseGoogleBooksReturn => {
   const [books, setBooks] = useState<Book[]>([])

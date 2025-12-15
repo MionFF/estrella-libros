@@ -10,21 +10,21 @@ export default function FeaturedCollections() {
       title: t('home.featuredCollection.featuredBooks.title'),
       description: t('home.featuredCollection.featuredBooks.description'),
       icon: '📖',
-      count: t('home.featuredCollection.featuredBooks.count'),
+      tagline: t('home.featuredCollection.featuredBooks.tagline'),
       path: 'featured-books',
     },
     {
       title: t('home.featuredCollection.newReleases.title'),
       description: t('home.featuredCollection.newReleases.description'),
       icon: '🆕',
-      count: t('home.featuredCollection.newReleases.count'),
+      tagline: t('home.featuredCollection.newReleases.tagline'),
       path: 'new-releases',
     },
     {
       title: t('home.featuredCollection.awardWinners.title'),
       description: t('home.featuredCollection.awardWinners.description'),
       icon: '⭐',
-      count: t('home.featuredCollection.awardWinners.count'),
+      tagline: t('home.featuredCollection.awardWinners.tagline'),
       path: 'award-winners',
     },
   ]
@@ -44,7 +44,7 @@ export default function FeaturedCollections() {
             <div className='collection-card__icon'>{collection.icon}</div>
             <h3 className='collection-card__title'>{collection.title}</h3>
             <p className='collection-card__description'>{collection.description}</p>
-            <span className='collection-card__count'>{collection.count}</span>
+            <span className='collection-card__tagline'>{collection.tagline}</span>
           </div>
         ))}
       </div>

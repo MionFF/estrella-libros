@@ -36,22 +36,22 @@
     &:hover {
       color: #667eea;
     }
-  }
 
-  &__logo-icon {
-    font-size: 1.5rem;
-    transition: transform 0.3s ease;
+    &-icon {
+      font-size: 1.5rem;
+      transition: transform 0.3s ease;
 
-    .header__logo:hover & {
-      transform: rotate(15deg) scale(1.1);
+      .header__logo:hover & {
+        transform: rotate(15deg) scale(1.1);
+      }
     }
-  }
 
-  &__logo-text {
-    @include mixins.no-select;
+    &-text {
+      @include mixins.no-select;
 
-    @media (max-width: 480px) {
-      display: none;
+      @media (max-width: 480px) {
+        display: none;
+      }
     }
   }
 
@@ -103,6 +103,19 @@
     }
   }
 
+  // LanguageMenu в navbar на mobile (справа от лого, слева от гамбургера)
+  &__mobile-navbar-extra {
+    display: none;
+
+    @media (max-width: 768px) {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+      margin-right: 16px;
+      z-index: 1002;
+    }
+  }
+
   // Кнопка мобильного меню
   &__menu-toggle {
     display: none;
@@ -130,7 +143,6 @@
       transform-origin: center;
     }
 
-    // Анимация при открытии
     &--active {
       span:nth-child(1) {
         transform: rotate(45deg) translate(6px, 6px);
@@ -173,6 +185,16 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+
+    @media (max-width: 768px) {
+      // Reverse порядок: Home → Search → ... → Favorites
+      flex-direction: column-reverse;
+
+      // Скрываем первый LanguageMenu (он в navbar)
+      > :first-child {
+        display: none;
+      }
+    }
 
     a {
       @include mixins.no-select;
@@ -221,7 +243,7 @@
     }
 
     @media (min-width: 769px) {
-      display: none !important;
+      display: none;
     }
   }
 }

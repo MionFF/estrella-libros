@@ -12,7 +12,7 @@ export default function RootLayout() {
 
   return (
     <>
-      <Header>
+      <Header mobileNavbarExtra={<LanguageMenu />}>
         <LanguageMenu />
         <NavLink to={'favorites'}>{t('header.favorites')}</NavLink>
         <NavLink to={'genres'}>{t('header.genres')}</NavLink>

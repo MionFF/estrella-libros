@@ -29,7 +29,7 @@ export default function AwardWinners() {
     <div className='award-winners-page'>
       <div className='award-winners-header'>
         {/* Добавляем кнопку назад */}
-        <button onClick={handleBack} className='award-winners-back-btn'>
+        <button onClick={handleBack} className='award-winners-back-btn' aria-label='Go back'>
           <svg
             width='20'
             height='20'
@@ -57,7 +57,7 @@ export default function AwardWinners() {
           {!loading && books.length > 0 && (
             <div className='award-winners-stats'>
               <span className='award-winners-count'>
-                {t('home.featuredCollection.awardWinners.count')}
+                {t('home.featuredCollection.awardWinners.tagline')}
               </span>
             </div>
           )}
@@ -74,7 +74,7 @@ export default function AwardWinners() {
           <div className='award-winners-error'>
             <div className='award-winners-error__content'>
               <div className='award-winners-error__icon'>😔</div>
-              <h3>Unable to Load Award Winners</h3>
+              <h3>{t('home.featuredCollection.awardWinners.unableToLoad')}</h3>
               <p>{error}</p>
               <div className='award-winners-error__actions'>
                 <button onClick={handleRetry} className='award-winners-error__button'>
@@ -96,8 +96,8 @@ export default function AwardWinners() {
             ) : (
               <div className='award-winners-empty'>
                 <div className='award-winners-empty__icon'>📚</div>
-                <h3>No award-winning books found</h3>
-                <p>We couldn't find any books matching your criteria.</p>
+                <h3>{t('home.featuredCollection.awardWinners.noBooksFound')}</h3>
+                <p>{t('home.featuredCollection.awardWinners.errorDescription')}</p>
                 <div className='award-winners-empty__actions'>
                   <button onClick={handleRetry} className='award-winners-empty__button'>
                     {t('common.tryAgain')}

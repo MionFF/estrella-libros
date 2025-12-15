@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next'
 import { usePWAInstall } from '../../hooks/usePWAInstall'
 
 export default function InstallPrompt() {
+  const { t } = useTranslation('common')
   const { isInstallable, handleInstall, handleDismiss } = usePWAInstall()
 
   if (!isInstallable) return null
@@ -10,7 +12,7 @@ export default function InstallPrompt() {
       <button
         className='install-prompt-close'
         onClick={handleDismiss}
-        aria-label='Close install prompt'
+        aria-label={t('installPrompt.closeAriaLabel')}
       >
         ×
       </button>
@@ -44,12 +46,12 @@ export default function InstallPrompt() {
         </div>
 
         <div className='install-prompt-text'>
-          <h3>Install Estrella Libros</h3>
-          <p>Quick access from your device</p>
+          <h3>{t('installPrompt.title')}</h3>
+          <p>{t('installPrompt.subtitle')}</p>
         </div>
 
         <button className='install-prompt-btn' onClick={handleInstall}>
-          Install
+          {t('installPrompt.installButton')}
         </button>
       </div>
     </div>

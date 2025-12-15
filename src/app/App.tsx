@@ -7,7 +7,7 @@ import { ScrollToTop } from '../helpers/ScrollToTop'
 import FeaturedBooks from '../pages/collections/featured-books/FeaturedBooks'
 import NewReleases from '../pages/collections/new-releases/NewReleases'
 import AwardWinners from '../pages/collections/award-winners/AwardWinners'
-import Genres from '../pages/genres/Genres/Gengres'
+import Genres from '../pages/genres/Genres/Genres'
 import GenreBookPage from '../pages/genres/GenreBookPage/GenreBookPage'
 import FavoritesPage from '../pages/favorites/FavoritesPage'
 

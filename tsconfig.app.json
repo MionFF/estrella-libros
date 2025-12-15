@@ -6,6 +6,7 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "types": ["jest", "@testing-library/jest-dom", "node"],
 
     /* For best modules readability */
     "baseUrl": "./src",
@@ -38,5 +39,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src", "src/jest-setup.d.ts"]
 }

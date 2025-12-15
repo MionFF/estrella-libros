@@ -37,19 +37,28 @@
       "featuredBooks": {
         "title": "Libros Destacados",
         "description": "Selección cuidadosamente elegida de obras literarias notables",
-        "count": "Colección curada"
+        "tagline": "Colección curada",
+        "unableToLoad": "No se pueden cargar los libros",
+        "noBooksFound": "No se encontraron libros",
+        "errorDescription": "No pudimos encontrar libros que coincidan con tus criterios."
       },
 
       "newReleases": {
         "title": "Novedades",
         "description": "Libros nuevos de autores y editoriales contemporáneos",
-        "count": "Últimas incorporaciones"
+        "tagline": "Últimas incorporaciones",
+        "unableToLoad": "No se pueden cargar los nuevos lanzamientos",
+        "noBooksFound": "No se encontraron nuevos lanzamientos",
+        "errorDescription": "No pudimos encontrar nuevos libros que coincidan con tus criterios."
       },
 
       "awardWinners": {
         "title": "Ganadores de Premios",
         "description": "Literatura aclamada por la crítica y galardonada",
-        "count": "Colección premiada"
+        "tagline": "Colección premiada",
+        "unableToLoad": "No se pueden cargar los ganadores de premios",
+        "noBooksFound": "No se encontraron libros ganadores de premios",
+        "errorDescription": "No pudimos encontrar libros que coincidan con tus criterios."
       }
     }
   },
@@ -204,5 +213,12 @@
     "discoveringBooks": "Descubriendo libros notables...",
     "loadingNewReleases": "Cargando novedades...",
     "loadingAwardWinners": "Cargando libros galardonados..."
+  },
+
+  "installPrompt": {
+    "title": "Instalar Estrella Libros",
+    "subtitle": "Acceso rápido desde tu dispositivo",
+    "installButton": "Instalar",
+    "closeAriaLabel": "Cerrar sugerencia de instalación"
   }
 }

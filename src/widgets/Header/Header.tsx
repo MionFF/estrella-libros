@@ -1,7 +1,12 @@
-import React from 'react'
 import { useState, useEffect } from 'react'
 
-export default function Header({ children }: { children: React.ReactNode }) {
+export default function Header({
+  children,
+  mobileNavbarExtra,
+}: {
+  children: React.ReactNode
+  mobileNavbarExtra?: React.ReactNode
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   useEffect(() => {
@@ -19,7 +24,6 @@ export default function Header({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Закрываем меню при клике на любую ссылку в мобильном меню
   useEffect(() => {
     const handleMobileLinkClick = () => {
       setIsMenuOpen(false)
@@ -35,10 +39,10 @@ export default function Header({ children }: { children: React.ReactNode }) {
         link.removeEventListener('click', handleMobileLinkClick)
       })
     }
-  }, [isMenuOpen]) // Добавляем/убираем обработчики когда меню открывается/закрывается
+  }, [isMenuOpen])
 
   return (
-    <header className='header'>
+    <header className='header' data-testid='header'>
       <div className='header__container'>
         {/* Логотип */}
         <div className='header__logo'>
@@ -47,7 +51,16 @@ export default function Header({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Навигация для десктопа */}
-        <nav className='header__nav'>{children}</nav>
+        <nav className='header__nav' data-testid='desktop-nav'>
+          {children}
+        </nav>
+
+        {/* LanguageMenu для мобилы (в navbar) */}
+        {mobileNavbarExtra && (
+          <div className='header__mobile-navbar-extra' data-testid='mobile-nav-extra'>
+            {mobileNavbarExtra}
+          </div>
+        )}
 
         {/* Кнопка мобильного меню */}
         <button
@@ -62,13 +75,16 @@ export default function Header({ children }: { children: React.ReactNode }) {
 
         {/* Мобильное меню */}
         <div className={`header__mobile-nav ${isMenuOpen ? 'header__mobile-nav--open' : ''}`}>
-          <div className='header__mobile-nav-content'>{children}</div>
+          <div className='header__mobile-nav-content' data-testid='mobile-nav'>
+            {children}
+          </div>
         </div>
 
         {/* Оверлей для мобильного меню */}
         <div
           className={`header__overlay ${isMenuOpen ? 'header__overlay--visible' : ''}`}
           onClick={() => setIsMenuOpen(false)}
+          data-testid='overlay'
         />
       </div>
     </header>

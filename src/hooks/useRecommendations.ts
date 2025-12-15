@@ -63,9 +63,7 @@ export const useRecommendations = () => {
 
     // Создаем комбинированный запрос для большего разнообразия
     const combinedQuery = selectedStrategies.map(strategy => strategy.query).join(' ')
-    const combinedDescription = selectedStrategies.map(strategy => strategy.description).join(' & ')
 
-    console.log(`Loading: ${combinedDescription}`)
     searchBooks(combinedQuery, 25)
   }
 
