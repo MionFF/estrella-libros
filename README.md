@@ -1,73 +1,262 @@
-# React + TypeScript + Vite
+# Estrella Libros
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Estrella Libros is a multilingual Progressive Web Application for discovering, exploring, and saving books through the Google Books API.
 
-Currently, two official plugins are available:
+Users can search books, explore detailed information, save favorites, switch interface languages, install the application as a PWA, and continue using previously cached content when connectivity is limited.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Live demo
 
-## React Compiler
+https://fluffy-platypus-9cfc3e.netlify.app
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Screenshots
 
-## Expanding the ESLint configuration
+### Home page
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+![Home page](docs/assets/screenshots/home-desktop.png)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Search results
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+![Search results](docs/assets/screenshots/search-results-desktop.png)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Book details
+
+![Book details](docs/assets/screenshots/book-details-desktop.png)
+
+### Favorites
+
+![Favorites](docs/assets/screenshots/favorites-desktop.png)
+
+### Mobile UI
+
+![Mobile UI](docs/assets/screenshots/mobile-home.png)
+
+## Features
+
+* Search books through the Google Books API
+* View normalized book details
+* Save and manage favorite books
+* Persist favorites in localStorage
+* Switch UI language between English, Russian, and Spanish
+* Detect language from query string, localStorage, browser settings, and cookies
+* Install the application as a Progressive Web App
+* Cache API responses and book cover images for improved repeat visits
+* Handle loading, error, empty, timeout, and offline states
+* Responsive layout for desktop, tablet, and mobile devices
+* Unit and React Testing Library coverage for core application flows
+
+## Tech Stack
+
+* React
+* TypeScript
+* Vite
+* React Router
+* Zustand
+* i18next / react-i18next
+* Google Books API
+* SCSS
+* Vite PWA
+* Jest
+* React Testing Library
+* Netlify
+
+## Architecture Overview
+
+The application follows a feature-oriented React SPA architecture built around reusable UI components, isolated business logic, and centralized state management.
+
+High-level structure:
+
+```txt
+src/
+  config/       environment and API config
+  features/     reusable feature components and domain types
+  hooks/        API and behavior hooks
+  pages/        route-level pages
+  store/        Zustand state
+  utils/        data cleanup and helper functions
+  widgets/      larger layout blocks
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Core responsibilities are separated between API integration, state management, localization, routing, and UI rendering to keep the codebase maintainable and easy to extend.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Google Books API
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+The primary API integration is implemented through `useGoogleBooks`.
+
+Responsibilities include:
+
+* searching books by query
+* fetching a book by id
+* handling loading and error states
+* request timeout handling
+* offline detection
+* fallback values for incomplete API responses
+* response normalization
+* HTTPS cover image normalization
+* category and description cleanup
+
+The API key is provided through an environment variable.
+
+## State Management
+
+Favorites are managed with Zustand.
+
+The favorites store:
+
+* keeps favorite book ids in a `Set`
+* exposes selectors for favorite state
+* supports toggling and clearing favorites
+* persists data to localStorage
+* restores persisted ids after reload
+* uses Zustand middleware: `persist`, `devtools`, and `immer`
+
+This allows favorite books to remain available across browser sessions without additional infrastructure.
+
+## Internationalization
+
+The interface supports:
+
+* English
+* Russian
+* Spanish
+
+Localization is implemented with `i18next`, `react-i18next`, `i18next-http-backend`, and `i18next-browser-languagedetector`.
+
+Language detection order:
+
+```txt
+querystring -> localStorage -> navigator -> cookie
 ```
+
+Translation files are loaded from:
+
+```txt
+/locales/{{lng}}/{{ns}}.json
+```
+
+## PWA
+
+The application includes Progressive Web App support through `vite-plugin-pwa`.
+
+Implemented capabilities:
+
+* web app manifest
+* installable application experience
+* auto-updating service worker
+* runtime caching for Google Books API requests
+* runtime caching for book cover images
+* cleanup of outdated caches
+
+Caching strategy:
+
+* Google Books API: `NetworkFirst`
+* Book cover images: `CacheFirst`
+
+These strategies improve repeat visits, support installation on supported devices, and provide access to previously cached content when connectivity is limited.
+
+## Testing
+
+The project includes unit and React Testing Library tests.
+
+Covered areas include:
+
+* Google Books API hook behavior
+* PWA install hook
+* recommendations hook
+* favorites store
+* search UI
+* book cards
+* book details modal
+* favorites page
+* language menu
+* offline banner
+* header
+* collection pages
+* genre pages
+* recommendations page
+
+Quality commands:
+
+```bash
+npm run lint
+npm run build
+npm run test
+npm audit
+```
+
+Current project status:
+
+```txt
+Lint: passing
+Build: passing
+Tests: passing
+Audit: 0 vulnerabilities
+```
+
+## Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/MionFF/estrella-libros.git
+cd estrella-libros
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Create environment file
+
+Create `.env.local` from `.env.example`:
+
+```bash
+cp .env.example .env.local
+```
+
+Add your Google Books API key:
+
+```txt
+VITE_GOOGLE_BOOKS_API_KEY=your_api_key_here
+```
+
+You can create a key in Google Cloud Console.
+
+### 4. Start development server
+
+```bash
+npm run dev
+```
+
+Open:
+
+```txt
+http://localhost:5173
+```
+
+## Available Scripts
+
+```bash
+npm run dev
+npm run build
+npm run preview
+npm run lint
+npm run test
+npm run test:watch
+npm run test:coverage
+```
+
+## Engineering Focus
+
+The project demonstrates:
+
+* external API integration
+* client-side routing
+* state management with Zustand
+* internationalization
+* Progressive Web App architecture
+* responsive UI development
+* automated testing with Jest and React Testing Library
+
+The application uses Google Books API as its primary data source and persists user preferences locally to provide a fast and lightweight user experience.

@@ -8,7 +8,7 @@ import react from 'eslint-plugin-react';
 export default [
   // Игнорируем dist
   {
-    ignores: ['dist/**', 'node_modules/**'],
+    ignores: ['dist/**', 'dev-dist/**', 'node_modules/**', 'coverage/**'],
   },
   
   // Базовые конфиги

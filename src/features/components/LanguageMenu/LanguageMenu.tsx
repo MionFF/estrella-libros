@@ -1,8 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import 'flag-icons/css/flag-icons.min.css'
 
-type Lang = { code: 'en' | 'ru' | 'es' | 'fr' | 'de'; label: string; flag?: React.ReactNode }
+type LangCode = 'en' | 'ru' | 'es'
+
+type Lang = {
+  code: LangCode
+  label: string
+  flag: string
+}
 
 export default function LanguageMenu() {
   const { i18n } = useTranslation()
@@ -10,17 +15,19 @@ export default function LanguageMenu() {
   const btnRef = useRef<HTMLButtonElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
 
-  // Простые SVG-флаги (библиотека flag-icons)
   const langs: Lang[] = useMemo(
     () => [
-      { code: 'en', label: 'English', flag: <span className='fi fi-us'></span> },
-      { code: 'ru', label: 'Русский', flag: <span className='fi fi-ru'></span> },
-      { code: 'es', label: 'Español', flag: <span className='fi fi-es'></span> },
+      { code: 'en', label: 'English', flag: '🇺🇸' },
+      { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+      { code: 'es', label: 'Español', flag: '🇪🇸' },
     ],
     [],
   )
 
-  const current = (i18n.language || 'en').split('-')[0] as Lang['code']
+  const currentLanguage = (i18n.language || 'en').split('-')[0]
+  const current = langs.some(lang => lang.code === currentLanguage)
+    ? (currentLanguage as LangCode)
+    : 'en'
   const activeIndex = Math.max(
     0,
     langs.findIndex(l => l.code === current),
@@ -52,7 +59,7 @@ export default function LanguageMenu() {
     return () => document.removeEventListener('keydown', onKey)
   }, [open])
 
-  const changeLanguage = async (code: Lang['code']) => {
+  const changeLanguage = async (code: LangCode) => {
     await i18n.changeLanguage(code)
     // Детектор кэширует выбор (localStorage/cookie), обновлять вручную не требуется
     close()
