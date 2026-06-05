@@ -9,11 +9,10 @@
     "types": ["jest", "@testing-library/jest-dom", "node"],
 
     /* For best modules readability */
-    "baseUrl": "./src",
     "paths": {
-      "@components/*": ["components/*"],
-      "@hooks/*": ["hooks/*"],
-      "@utils/*": ["utils/*"]
+      "@components/*": ["./src/components/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@utils/*": ["./src/utils/*"]
     },
 
     /* For better "default import" work */
