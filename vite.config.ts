@@ -46,7 +46,6 @@ export default defineConfig({
       workbox: {
         globPatterns: [
           '**/*.{js,css,html,ico,png,svg,woff2}',
-          'locales/**/*.json'
         ],
         cleanupOutdatedCaches: true, // автоматическая очистка старых версий кеша
         runtimeCaching: [
