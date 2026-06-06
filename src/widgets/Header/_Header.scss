@@ -22,7 +22,6 @@
     position: relative;
   }
 
-  // Логотип
   &__logo {
     display: flex;
     align-items: center;
@@ -55,7 +54,6 @@
     }
   }
 
-  // Десктопная навигация
   &__nav {
     display: flex;
     align-items: center;
@@ -103,7 +101,6 @@
     }
   }
 
-  // LanguageMenu в navbar на mobile (справа от лого, слева от гамбургера)
   &__mobile-navbar-extra {
     display: none;
 
@@ -116,7 +113,6 @@
     }
   }
 
-  // Кнопка мобильного меню
   &__menu-toggle {
     display: none;
     flex-direction: column;
@@ -158,7 +154,6 @@
     }
   }
 
-  // Мобильное меню
   &__mobile-nav {
     position: fixed;
     top: 0;
@@ -187,10 +182,8 @@
     gap: 8px;
 
     @media (max-width: 768px) {
-      // Reverse порядок: Home → Search → ... → Favorites
       flex-direction: column-reverse;
 
-      // Скрываем первый LanguageMenu (он в navbar)
       > :first-child {
         display: none;
       }
@@ -224,7 +217,6 @@
     }
   }
 
-  // Оверлей для мобильного меню
   &__overlay {
     position: fixed;
     top: 0;
@@ -248,7 +240,6 @@
   }
 }
 
-// Блокируем скролл когда меню открыто
 body.header-mobile-open {
   overflow: hidden;
 }

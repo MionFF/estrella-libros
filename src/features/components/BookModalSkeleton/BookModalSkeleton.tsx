@@ -1,12 +1,10 @@
 export default function BookModalSkeleton() {
   return (
     <article className='book-modal__card'>
-      {/* Основная информация - более детальная */}
       <div className='book-modal__main'>
         <div className='book-modal__image book-modal__skeleton-cover'></div>
 
         <div className='book-modal__body'>
-          {/* Заголовок - многострочный как в реальной модалке */}
           <div className='book-modal__header'>
             <div className='book-modal__skeleton-title book-modal__skeleton-multiline'>
               <div className='book-modal__skeleton-line'></div>
@@ -14,16 +12,13 @@ export default function BookModalSkeleton() {
             </div>
           </div>
 
-          {/* Авторы */}
           <div className='book-modal__skeleton-text book-modal__skeleton-authors'></div>
 
-          {/* Кнопка избранного - точная копия реальной */}
           <div className='book-modal__favorite-section book-modal__skeleton-favorite'>
             <div className='book-modal__skeleton-favorite-btn'></div>
             <div className='book-modal__skeleton-text book-modal__skeleton-favorite-text'></div>
           </div>
 
-          {/* Мета-информация - больше деталей */}
           <div className='book-modal__skeleton-meta'>
             <div className='book-modal__skeleton-meta-item'>
               <div className='book-modal__skeleton-text book-modal__skeleton-meta-label'></div>
@@ -43,7 +38,6 @@ export default function BookModalSkeleton() {
             </div>
           </div>
 
-          {/* Ссылки - как реальные кнопки */}
           <div className='book-modal__links book-modal__skeleton-links'>
             <div className='book-modal__skeleton-link'></div>
             <div className='book-modal__skeleton-link'></div>
@@ -51,7 +45,6 @@ export default function BookModalSkeleton() {
         </div>
       </div>
 
-      {/* Описание - многострочное */}
       <div className='book-modal__section'>
         <div className='book-modal__skeleton-title book-modal__skeleton-medium'></div>
         <div className='book-modal__skeleton-description'>
@@ -63,7 +56,6 @@ export default function BookModalSkeleton() {
         </div>
       </div>
 
-      {/* Жанры - больше тегов */}
       <div className='book-modal__section'>
         <div className='book-modal__skeleton-title book-modal__skeleton-medium'></div>
         <div className='book-modal__skeleton-tags'>

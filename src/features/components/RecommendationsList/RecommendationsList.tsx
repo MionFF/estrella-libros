@@ -57,7 +57,6 @@ export default function RecommendationsList() {
 
   return (
     <div className='recommendations-content'>
-      {/* Header с информацией и кнопкой обновления */}
       <div className='recommendations-header'>
         <div className='recommendations-header__info'>
           <h2>{t('recommendations.list.title')}</h2>
@@ -106,7 +105,6 @@ export default function RecommendationsList() {
         </button>
       </div>
 
-      {/* Сетка книг */}
       {books.length > 0 ? (
         <div className='books-grid books-grid--recommendations'>
           {books.map(book => (
@@ -124,7 +122,6 @@ export default function RecommendationsList() {
         </div>
       )}
 
-      {/* Информация в футере */}
       <div className='recommendations-footer'>
         <p>
           💡 <strong>{t('recommendations.list.footerTip')}</strong>{' '}

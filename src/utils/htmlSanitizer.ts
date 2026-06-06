@@ -9,16 +9,14 @@ export const cleanCategories = (categories: string[] | undefined): string[] => {
   return categories
     .map(cat => stripHtmlTags(cat))
     .map(cat => {
-      // Берем только первую часть до / и убираем лишнее
       const parts = cat.split('/')
       return parts[0].trim()
     })
-    .filter(cat => cat.length > 0) // Убираем пустые
-    .filter((cat, index, self) => self.indexOf(cat) === index) // Уникальные
-    .slice(0, 3) // Максимум 3 категории
+    .filter(cat => cat.length > 0)
+    .filter((cat, index, self) => self.indexOf(cat) === index)
+    .slice(0, 3)
 }
 
-// Обрезает текст до указанной длины
 export const truncateText = (text: string, maxLength: number): string => {
   if (!text) return ''
   if (text.length <= maxLength) return text

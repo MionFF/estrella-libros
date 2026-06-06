@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 
 type Props = {
-  threshold?: number // px после которых показывать
-  autoHideDelay?: number // ms неактивности перед скрытием
+  threshold?: number
+  autoHideDelay?: number
 }
 
 export default function ScrollTopButton({ threshold = 300, autoHideDelay = 2000 }: Props) {
@@ -15,22 +15,17 @@ export default function ScrollTopButton({ threshold = 300, autoHideDelay = 2000 
       const shouldShow = window.scrollY > threshold
       setVisible(shouldShow)
 
-      // Если кнопка должна быть видна
       if (shouldShow) {
-        // Сбрасываем автоскрытие (показываем кнопку при скролле)
         setAutoHidden(false)
 
-        // Очищаем предыдущий таймер
         if (hideTimerRef.current !== null) {
           clearTimeout(hideTimerRef.current)
         }
 
-        // Запускаем новый таймер на автоскрытие
         hideTimerRef.current = window.setTimeout(() => {
           setAutoHidden(true)
         }, autoHideDelay)
       } else {
-        // Если скроллим наверх (< threshold), сбрасываем таймер
         if (hideTimerRef.current !== null) {
           clearTimeout(hideTimerRef.current)
           hideTimerRef.current = null
@@ -39,7 +34,7 @@ export default function ScrollTopButton({ threshold = 300, autoHideDelay = 2000 
       }
     }
 
-    onScroll() // Проверка при монтировании
+    onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
 
     return () => {

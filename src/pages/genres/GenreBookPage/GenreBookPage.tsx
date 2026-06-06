@@ -21,7 +21,7 @@ export default function GenreBookPage() {
   const genre = localizedGenres.find(g => g.id === genreId)
 
   useEffect(() => {
-    if (!genreId || !genre) return // защита от undefined
+    if (!genreId || !genre) return
 
     if (books.length === 0 && !loading && !error) {
       searchBooks(genre.query, 40)
@@ -84,7 +84,6 @@ export default function GenreBookPage() {
             ))}
           </div>
         ) : (
-          // Fallback для пустого состояния
           <div className='genre-books-empty'>
             <div className='genre-books-empty__icon'>📚</div>
             <h3>{t('genres.bookPage.emptyBooksTitle')}</h3>

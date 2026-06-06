@@ -19,17 +19,14 @@ export default function FavoriteButton({
   const [justToggled, setJustToggled] = useState(false)
 
   const handleClick = () => {
-    // console.log('🆔 Book ID being toggled:', bookId, 'Type:', typeof bookId)
-    // console.log('📚 Current book object:', bookId) // если есть доступ к book объекту
-    const willBeFavorite = !pressed // после toggle состояние инвертируется
+    const willBeFavorite = !pressed
     toggle(bookId)
 
-    // Анимация только когда добавляем в избранное (willBeFavorite=true)
     if (willBeFavorite) {
       setJustToggled(true)
     }
 
-    // Лог для дебага массива избранного
+    // Log for debugging favorite array
     // if (import.meta.env.DEV) {
     //   console.log('fav ids:', Array.from(favStore.getState().ids)) // import { favStore } is required!
     // }

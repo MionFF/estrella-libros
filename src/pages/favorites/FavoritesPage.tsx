@@ -19,7 +19,6 @@ export default function FavoritesPage() {
   const heroTitle = `⭐ ${t('favorites.hero.title')}`
   const heroSubtitle = t('favorites.hero.subtitle')
 
-  // Загружаем реальные данные книг
   useEffect(() => {
     const loadFavoriteBooks = async () => {
       if (favoriteIds.size === 0) {
@@ -30,11 +29,9 @@ export default function FavoritesPage() {
       setLoading(true)
 
       try {
-        // 🔥 ПРОСТОЙ подход - getBookById теперь всегда возвращает Book | null
         const bookPromises = Array.from(favoriteIds).map(id => getBookById(id))
         const booksResults = await Promise.all(bookPromises)
 
-        // Фильтруем null значения
         const validBooks = booksResults.filter((book): book is Book => book !== null)
         const failedIds = favoriteIds.size - validBooks.length
 

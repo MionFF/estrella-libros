@@ -12,7 +12,9 @@
     background: #fff;
     color: #1f2937;
     cursor: pointer;
-    transition: transform 0.3s ease, background 0.3s ease;
+    transition:
+      transform 0.3s ease,
+      background 0.3s ease;
 
     &:hover {
       background: #f8fafc;
@@ -46,16 +48,14 @@
     padding: 6px;
     z-index: 20;
 
-    // На мобиле: popover открывается влево (к центру экрана)
     @media (max-width: 768px) {
       right: auto;
       left: 50%;
-      transform: translateX(-50%); // Центрируем относительно кнопки
+      transform: translateX(-50%);
       min-inline-size: 160px;
-      max-inline-size: calc(100vw - 32px); // Отступы слева/справа
+      max-inline-size: calc(100vw - 32px);
     }
 
-    // Совсем узкие экраны: растягиваем с отступами
     @media (max-width: 340px) {
       left: 8px;
       right: 8px;

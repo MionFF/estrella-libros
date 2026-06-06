@@ -47,7 +47,7 @@ export const favStore = createStore<FavoritesState>()(
         partialize: state => toPersist(state),
         onRehydrateStorage: () => state => {
           if (!state) return
-          // Возвращаем из стора
+
           const persisted = { ids: Array.from(state.ids) }
           state.ids = fromPersist(persisted)
         },
