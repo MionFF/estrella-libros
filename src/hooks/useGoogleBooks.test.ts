@@ -75,7 +75,12 @@ describe('useGoogleBooks', () => {
 
     expect(result.current.books).toHaveLength(1)
     expect(result.current.books[0].title).toBe('Holly')
-    expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('q=Holly'))
+    expect(global.fetch).toHaveBeenCalledWith(
+      expect.stringContaining('q=Holly'),
+      expect.objectContaining({
+        signal: expect.any(AbortSignal),
+      }),
+    )
   })
 
   test('empty request', () => {
@@ -212,7 +217,12 @@ describe('useGoogleBooks', () => {
     expect(book).not.toBeNull()
     expect(book!.title).toBe('Test Book') // Erorr with "?.": Property 'title' does not exist on type 'never'.
     expect(book!.authors).toEqual(['Test Author']) // Error with "?.": Property 'authors' does not exist on type 'never'.
-    expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('/volumes/123?key='))
+    expect(global.fetch).toHaveBeenCalledWith(
+      expect.stringContaining('/volumes/123?key='),
+      expect.objectContaining({
+        signal: expect.any(AbortSignal),
+      }),
+    )
   })
 
   test('getBookById returns null on 404', async () => {
@@ -292,10 +302,17 @@ describe('useGoogleBooks', () => {
     expect(global.fetch).toHaveBeenNthCalledWith(
       1,
       'https://www.googleapis.com/books/v1/volumes/1201?key=test-key',
+      expect.objectContaining({
+        signal: expect.any(AbortSignal),
+      }),
     )
+
     expect(global.fetch).toHaveBeenNthCalledWith(
       2,
       'https://www.googleapis.com/books/v1/volumes/1201',
+      expect.objectContaining({
+        signal: expect.any(AbortSignal),
+      }),
     )
   })
 })

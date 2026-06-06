@@ -8,9 +8,11 @@ function getGoogleBooksApiKey() {
 export async function searchGoogleBooks(
   query: string,
   maxResults: number = 20,
+  signal?: AbortSignal,
 ): Promise<GoogleBooksVolume[]> {
   const response = await fetch(
     `${BASE_URL}?q=${encodeURIComponent(query)}&maxResults=${maxResults}&key=${getGoogleBooksApiKey()}`,
+    { signal },
   )
 
   if (!response.ok) {
@@ -22,11 +24,14 @@ export async function searchGoogleBooks(
   return data.items ?? []
 }
 
-export async function fetchGoogleBookById(bookId: string): Promise<GoogleBooksVolume | null> {
-  let response = await fetch(`${BASE_URL}/${bookId}?key=${getGoogleBooksApiKey()}`)
+export async function fetchGoogleBookById(
+  bookId: string,
+  signal?: AbortSignal,
+): Promise<GoogleBooksVolume | null> {
+  let response = await fetch(`${BASE_URL}/${bookId}?key=${getGoogleBooksApiKey()}`, { signal })
 
   if (!response.ok) {
-    response = await fetch(`${BASE_URL}/${bookId}`)
+    response = await fetch(`${BASE_URL}/${bookId}`, { signal })
   }
 
   if (!response.ok) {

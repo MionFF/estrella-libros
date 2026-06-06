@@ -4,6 +4,10 @@ import type { Book, UseGoogleBooksReturn } from '../features/types'
 import { fetchGoogleBookById, searchGoogleBooks } from '../api/googleBooksApi'
 import { normalizeDetailedBook, normalizeSearchBook } from '../utils/normalizeBook'
 
+function isAbortError(error: unknown) {
+  return error instanceof DOMException && error.name === 'AbortError'
+}
+
 export const useGoogleBooks = (): UseGoogleBooksReturn => {
   const [books, setBooks] = useState<Book[]>([])
   const [loading, setLoading] = useState(false)
@@ -24,24 +28,29 @@ export const useGoogleBooks = (): UseGoogleBooksReturn => {
         return
       }
 
+      const controller = new AbortController()
+      let didTimeout = false
+
       setLoading(true)
       setError(null)
 
-      const timeoutId = window.setTimeout(() => {
+      const timeoutId = setTimeout(() => {
+        didTimeout = true
+        controller.abort()
         setError(t('common.requestTimeout'))
         setLoading(false)
       }, 10000)
 
       try {
-        const volumes = await searchGoogleBooks(query, maxResults)
+        const volumes = await searchGoogleBooks(query, maxResults, controller.signal)
         const formattedBooks = volumes.map(normalizeSearchBook)
-
-        window.clearTimeout(timeoutId)
 
         setBooks(formattedBooks)
         setHasMore(formattedBooks.length >= maxResults)
       } catch (err) {
-        window.clearTimeout(timeoutId)
+        if (didTimeout || isAbortError(err)) {
+          return
+        }
 
         if (!navigator.onLine) {
           setError(t('common.offlineError'))
@@ -54,7 +63,11 @@ export const useGoogleBooks = (): UseGoogleBooksReturn => {
         setError(errorMessage)
         setBooks([])
       } finally {
-        setLoading(false)
+        clearTimeout(timeoutId)
+
+        if (!didTimeout) {
+          setLoading(false)
+        }
       }
     },
     [loading, t],
@@ -67,20 +80,33 @@ export const useGoogleBooks = (): UseGoogleBooksReturn => {
   }, [])
 
   const getBookById = useCallback(async (bookId: string): Promise<Book | null> => {
+    const controller = new AbortController()
+    let didTimeout = false
+
     setLoading(true)
     setError(null)
 
+    const timeoutId = setTimeout(() => {
+      didTimeout = true
+      controller.abort()
+    }, 10000)
+
     try {
-      const volume = await fetchGoogleBookById(bookId)
+      const volume = await fetchGoogleBookById(bookId, controller.signal)
 
       if (!volume) {
         return null
       }
 
       return normalizeDetailedBook(volume)
-    } catch {
+    } catch (err) {
+      if (didTimeout || isAbortError(err)) {
+        return null
+      }
+
       return null
     } finally {
+      clearTimeout(timeoutId)
       setLoading(false)
     }
   }, [])
