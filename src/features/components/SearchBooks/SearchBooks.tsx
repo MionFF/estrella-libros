@@ -12,10 +12,13 @@ export default function BooksList() {
   const { t } = useTranslation('common')
 
   const handleSearch = (query: string) => {
-    if (!query.trim()) return
+    const trimmedQuery = query.trim()
 
-    setSearchQuery(query)
-    searchBooks(query, 20)
+    if (!trimmedQuery) return
+
+    setSearchQuery(trimmedQuery)
+    setHasSearched(true)
+    searchBooks(trimmedQuery, 20)
   }
 
   const handleClear = () => {
