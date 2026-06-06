@@ -12,10 +12,13 @@ export default function BooksList() {
   const { t } = useTranslation('common')
 
   const handleSearch = (query: string) => {
-    if (!query.trim()) return
+    const trimmedQuery = query.trim()
 
-    setSearchQuery(query)
-    searchBooks(query, 20)
+    if (!trimmedQuery) return
+
+    setSearchQuery(trimmedQuery)
+    setHasSearched(true)
+    searchBooks(trimmedQuery, 20)
   }
 
   const handleClear = () => {
@@ -32,7 +35,6 @@ export default function BooksList() {
 
   return (
     <div className='search-books'>
-      {/* Поисковая панель */}
       <div className='search-books__header'>
         <div className='search-books__input-group'>
           <div className='search-books__input-wrapper'>
@@ -81,7 +83,6 @@ export default function BooksList() {
           </div>
         </div>
 
-        {/* Быстрые подсказки */}
         <div className='search-books__suggestions'>
           <span>{t('search.suggestions.try')}</span>
           {[
@@ -104,7 +105,6 @@ export default function BooksList() {
         </div>
       </div>
 
-      {/* Состояние загрузки */}
       {loading && (
         <div className='search-books__loader'>
           <Loader />
@@ -112,7 +112,6 @@ export default function BooksList() {
         </div>
       )}
 
-      {/* Сообщение об ошибке */}
       {error && (
         <div className='search-books__error'>
           <div className='search-books__error-message'>
@@ -128,7 +127,6 @@ export default function BooksList() {
         </div>
       )}
 
-      {/* Результаты поиска */}
       {!loading && !error && (
         <div className='search-books__results'>
           {hasSearched && (

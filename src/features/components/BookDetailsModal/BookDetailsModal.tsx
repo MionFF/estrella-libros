@@ -22,10 +22,8 @@ export default function BookModal({ bookId, isOpen, onClose }: BookModalProps) {
   const modalRef = useRef<HTMLDivElement>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
 
-  // Блокирование скролла
   useEffect(() => {
     if (isOpen) {
-      // Запоминаем позицию скролла
       const scrollY = window.scrollY
       document.body.style.position = 'fixed'
       document.body.style.top = `-${scrollY}px`
@@ -33,7 +31,6 @@ export default function BookModal({ bookId, isOpen, onClose }: BookModalProps) {
       document.body.style.overflow = 'hidden'
 
       return () => {
-        // Восстанавливаем скролл
         document.body.style.position = ''
         document.body.style.top = ''
         document.body.style.width = ''
@@ -43,7 +40,6 @@ export default function BookModal({ bookId, isOpen, onClose }: BookModalProps) {
     }
   }, [isOpen])
 
-  // Загружаем данные книги
   useEffect(() => {
     if (isOpen && bookId) {
       const fetchBook = async () => {
@@ -56,7 +52,6 @@ export default function BookModal({ bookId, isOpen, onClose }: BookModalProps) {
     }
   }, [isOpen, bookId, getBookById])
 
-  // Управление событиями
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) onClose()
@@ -176,7 +171,6 @@ export default function BookModal({ bookId, isOpen, onClose }: BookModalProps) {
                   {t('bookCard.detailsModal.description')}
                 </h3>
                 <div className='book-modal__description'>
-                  {/* Декодируем HTML */}
                   <p dangerouslySetInnerHTML={{ __html: book.description }} />
                 </div>
               </div>

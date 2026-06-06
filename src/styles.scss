@@ -31,23 +31,22 @@
   --space: 16px;
   --border: #e5e5e5;
   --muted: #666;
-  --header-h: 56px; // Базовая высота шапки
+  --header-h: 56px;
 }
 
 html,
 body {
   width: 100%;
   max-width: 100vw;
-  overflow-x: clip; // 👈 Современная альтернатива, не ломает верстку
+  overflow-x: clip;
 }
 
 main {
   width: 100%;
   max-width: 100vw;
-  overflow: hidden; // 👈 Безопаснее чем на body
+  overflow: hidden;
 }
 
-// Гарантируем что все секции ведут себя предсказуемо
 section,
 .page,
 .container {
@@ -65,7 +64,6 @@ li {
   list-style: none;
 }
 
-// Элементы которые НЕ должны выделяться
 button,
 .btn,
 .nav-item,
@@ -83,7 +81,6 @@ button,
   cursor: default;
 }
 
-// Элементы которые ДОЛЖНЫ выделяться
 .content-text,
 .book-description,
 .article-content,

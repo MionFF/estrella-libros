@@ -28,7 +28,6 @@
     transform: scale(0.95);
   }
 
-  // Анимация кнопки (подскок + rotate) при клике
   &.fav-btn--animate {
     // animation: fav-pop 180ms ease-out;
     // animation: fav-fill-pulse 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -37,12 +36,10 @@
     // animation: fav-burst 500ms ease-out;
   }
 
-  // Финальное состояние path "в избранном"
   &--on .fav-btn__path {
     fill: currentColor;
   }
 
-  // Path отдельно — только заливка через transition
   &__path {
     fill: transparent;
     stroke: currentColor;

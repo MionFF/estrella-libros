@@ -1,6 +1,5 @@
 .book-modal {
   &__skeleton {
-    // Анимация загрузки
     @keyframes skeleton-loading {
       0% {
         background-position: 200% 0;
@@ -87,7 +86,6 @@
       }
     }
 
-    // Секция избранного
     &-favorite {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
@@ -105,7 +103,6 @@
       }
     }
 
-    // Мета-информация
     &-meta {
       display: flex;
       flex-direction: column;
@@ -131,7 +128,6 @@
       }
     }
 
-    // Ссылки
     &-links {
       display: flex;
       gap: 12px;
@@ -149,14 +145,12 @@
       border-radius: 6px;
     }
 
-    // Описание
     &-description {
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
 
-    // Теги
     &-tags {
       display: flex;
       flex-wrap: wrap;

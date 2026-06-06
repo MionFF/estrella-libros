@@ -8,9 +8,7 @@ export default function Footer({ children }: { children: React.ReactNode }) {
   return (
     <footer className='footer'>
       <div className='footer__container'>
-        {/* Основной контент */}
         <div className='footer__content'>
-          {/* Логотип и описание */}
           <div className='footer__brand'>
             <div className='footer__logo'>
               <span className='footer__logo-icon'>📚</span>
@@ -19,7 +17,6 @@ export default function Footer({ children }: { children: React.ReactNode }) {
             <p className='footer__description'>{t('footer.description')}</p>
           </div>
 
-          {/* Навигационные ссылки */}
           <nav className='footer__nav'>
             <div className='footer__nav-section'>
               <h4>{t('footer.explore')}</h4>
@@ -42,7 +39,6 @@ export default function Footer({ children }: { children: React.ReactNode }) {
           </nav>
         </div>
 
-        {/* Нижняя часть с копирайтом */}
         <div className='footer__bottom'>
           <div className='footer__copyright'>
             &copy; {year} {children}. All rights reserved.

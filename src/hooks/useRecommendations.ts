@@ -57,11 +57,9 @@ export const useRecommendations = () => {
   ]
 
   const loadRecommendations = () => {
-    // Выбираем 2 случайные стратегии и комбинируем их
     const shuffled = [...recommendationStrategies].sort(() => 0.5 - Math.random())
     const selectedStrategies = shuffled.slice(0, 2)
 
-    // Создаем комбинированный запрос для большего разнообразия
     const combinedQuery = selectedStrategies.map(strategy => strategy.query).join(' ')
 
     searchBooks(combinedQuery, 25)

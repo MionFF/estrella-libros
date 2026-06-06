@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom'
 import { fireEvent, render, screen } from '@testing-library/react'
-// import userEvent from '@testing-library/user-event'
 import ScrollTopButton from './ScrollTopButton'
 import { act } from 'react'
 import userEvent from '@testing-library/user-event'
@@ -70,27 +69,22 @@ describe('ScrollTopButton', () => {
 
     const button = screen.getByRole('button', { name: 'Scroll to top' })
 
-    // Первый скролл
     Object.defineProperty(window, 'scrollY', { value: 400, writable: true })
     fireEvent.scroll(window)
 
-    // Проходит 1.5 секунды (не хватает до автоскрытия)
     act(() => {
       jest.advanceTimersByTime(1500)
     })
     expect(button).not.toHaveClass('scroll-top--auto-hidden')
 
-    // Второй скролл (сбрасывает таймер)
     Object.defineProperty(window, 'scrollY', { value: 500, writable: true })
     fireEvent.scroll(window)
 
-    // Ещё 1.5 секунды (суммарно 3 секунды с первого скролла, но таймер сброшен)
     act(() => {
       jest.advanceTimersByTime(1500)
     })
     expect(button).not.toHaveClass('scroll-top--auto-hidden')
 
-    // Ещё 0.5 секунды (теперь 2 секунды с последнего скролла)
     act(() => {
       jest.advanceTimersByTime(500)
     })

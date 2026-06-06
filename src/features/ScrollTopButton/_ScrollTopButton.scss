@@ -19,27 +19,28 @@
   pointer-events: none;
   transform: translateX(-50%) scale(0.98);
 
-  // Базовая transition для появления/исчезновения
-  transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:hover {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     transform: translateX(-50%) translateY(-2px);
   }
 
-  // Кнопка видна (скролл > threshold)
   &--visible {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(-50%) scale(1);
   }
 
-  // Автоскрытие через инактивность (плавное исчезновение)
   &--auto-hidden {
     opacity: 0;
     pointer-events: none;
-    // Более долгая transition для плавного fade-out
-    transition: opacity 0.8s ease, transform 0.8s ease;
+    transition:
+      opacity 0.8s ease,
+      transform 0.8s ease;
   }
 
   @media (min-width: 1024px) {
@@ -47,7 +48,6 @@
   }
 }
 
-/* Адаптив */
 @media (max-width: 480px) {
   .scroll-top {
     width: 38px;

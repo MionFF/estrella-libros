@@ -68,18 +68,15 @@
   height: 16px;
   transition: transform 0.3s ease;
 
-  // Анимация вращения при загрузке
   &--spinning {
     animation: spin 1s linear infinite;
   }
 
-  // Плавное вращение при ховере
   .recommendations-header__refresh:hover:not(:disabled) & {
     transform: rotate(90deg);
   }
 }
 
-// Анимация вращения
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -89,7 +86,6 @@
   }
 }
 
-// Остальные стили остаются без изменений
 .books-grid--recommendations {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));

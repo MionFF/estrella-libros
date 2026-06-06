@@ -14,7 +14,6 @@ export function usePWAInstall() {
   )
 
   useEffect(() => {
-    // Если пользователь раньше отказался — не показываем
     if (userDismissed) return
 
     const handleBeforeInstall = (e: Event) => {
@@ -22,9 +21,8 @@ export function usePWAInstall() {
 
       const promptEvent = e as BeforeInstallPromptEvent
 
-      // Проверка на реальное событие
       if (typeof promptEvent.prompt !== 'function') {
-        return // Игнорируем mock события
+        return
       }
 
       setInstallPrompt(promptEvent)
@@ -47,7 +45,6 @@ export function usePWAInstall() {
 
   const handleInstall = async () => {
     if (!installPrompt || typeof installPrompt.prompt !== 'function') {
-      // В production это не должно вызываться, т.к. кнопка скрыта
       setIsInstallable(false)
       return
     }

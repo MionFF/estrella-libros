@@ -36,7 +36,6 @@ export default function LanguageMenu() {
   const toggle = () => setOpen(v => !v)
   const close = () => setOpen(false)
 
-  // Закрытие по клику вне
   useEffect(() => {
     if (!open) return
     const onDocClick = (e: MouseEvent) => {
@@ -49,7 +48,6 @@ export default function LanguageMenu() {
     return () => document.removeEventListener('mousedown', onDocClick)
   }, [open])
 
-  // Клавиатура: Esc закрыть, Arrow навигация
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => {
@@ -61,12 +59,10 @@ export default function LanguageMenu() {
 
   const changeLanguage = async (code: LangCode) => {
     await i18n.changeLanguage(code)
-    // Детектор кэширует выбор (localStorage/cookie), обновлять вручную не требуется
     close()
     btnRef.current?.focus()
   }
 
-  // Arrow навигация
   useEffect(() => {
     if (!open || !listRef.current) return
     const items = Array.from(
@@ -136,7 +132,6 @@ export default function LanguageMenu() {
   )
 }
 
-// 20px иконка (масштабируется CSS-ом, не обрежется)
 function GlobeIcon() {
   return (
     <svg

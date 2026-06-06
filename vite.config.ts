@@ -47,7 +47,7 @@ export default defineConfig({
         globPatterns: [
           '**/*.{js,css,html,ico,png,svg,woff2}',
         ],
-        cleanupOutdatedCaches: true, // автоматическая очистка старых версий кеша
+        cleanupOutdatedCaches: true,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/www\.googleapis\.com\/books\/v1\/.*/i,
@@ -59,7 +59,7 @@ export default defineConfig({
                 maxAgeSeconds: 60 * 60 * 24 // 24 hours
               },
               cacheableResponse: {
-                statuses: [200] // только успешные ответы
+                statuses: [200]
               }
             }
           },
