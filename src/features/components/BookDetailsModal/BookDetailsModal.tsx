@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
-import { useGoogleBooks } from '../../../hooks/useGoogleBooks'
-import type { Book } from '../../types'
+import { useBookDetailsQuery } from '../../books/bookQueries'
 import FavoriteButton from '../FavoriteButton/FavoriteButton'
 import BookModalSkeleton from '../BookModalSkeleton/BookModalSkeleton'
 import { useIsFavorite } from '../../../store/favStore'
@@ -14,9 +13,12 @@ interface BookModalProps {
 }
 
 export default function BookModal({ bookId, isOpen, onClose }: BookModalProps) {
+  const { data: book, isLoading, isFetching, isError, error } = useBookDetailsQuery(bookId, isOpen)
+
+  const loading = isLoading || isFetching
+  const errorMessage = error instanceof Error ? error.message : null
+
   const { t } = useTranslation('common')
-  const { getBookById, loading, error } = useGoogleBooks()
-  const [book, setBook] = useState<Book | null>(null)
   const isFavorite = useIsFavorite(bookId)
 
   const modalRef = useRef<HTMLDivElement>(null)
@@ -39,18 +41,6 @@ export default function BookModal({ bookId, isOpen, onClose }: BookModalProps) {
       }
     }
   }, [isOpen])
-
-  useEffect(() => {
-    if (isOpen && bookId) {
-      const fetchBook = async () => {
-        const data = await getBookById(bookId)
-        setBook(data)
-      }
-      fetchBook()
-    } else {
-      setBook(null)
-    }
-  }, [isOpen, bookId, getBookById])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -95,9 +85,9 @@ export default function BookModal({ bookId, isOpen, onClose }: BookModalProps) {
 
         {loading && !book ? (
           <BookModalSkeleton />
-        ) : error ? (
+        ) : isError && errorMessage ? (
           <div className='book-modal__error'>
-            {t('bookModal.error')}: {error}
+            {t('bookModal.error')}: {errorMessage}
           </div>
         ) : book ? (
           <article className='book-modal__card'>
