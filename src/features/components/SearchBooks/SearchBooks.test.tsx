@@ -1,45 +1,70 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import BooksList from './SearchBooks'
-import { useGoogleBooks } from '../../../hooks/useGoogleBooks'
+import React from 'react'
 
-// Мокируем хук
-jest.mock('../../../hooks/useGoogleBooks')
+// Mock child components that would pull in the real dependency chain (→ useGoogleBooks → googleBooksApi → env.ts)
+jest.mock('../BookCard/BookCard', () => ({
+  __esModule: true,
+  default: ({ book }: { book: { title?: string } }) =>
+    React.createElement('div', { 'data-testid': 'book-card' }, book.title ?? ''),
+}))
+
+type MockBook = {
+  id: string
+  title: string
+  authors: string[]
+}
+
+type MockQueryResult = {
+  data: MockBook[]
+  isLoading: boolean
+  isFetching: boolean
+  isError: boolean
+  error: Error | null
+}
+
+const createBooksSearchQueryResult = (
+  overrides: Partial<MockQueryResult> = {},
+): MockQueryResult => ({
+  data: [],
+  isLoading: false,
+  isFetching: false,
+  isError: false,
+  error: null,
+  ...overrides,
+})
+
+// eslint-disable-next-line no-var
+var mockUseBooksSearchQuery = jest.fn<MockQueryResult, [query: string, maxResults?: number]>(() =>
+  createBooksSearchQueryResult(),
+)
+
+jest.mock('../../books/bookQueries', () => ({
+  useBooksSearchQuery: mockUseBooksSearchQuery,
+}))
+
+// This import is safe because jest.mock hoisting ensures bookQueries and BookCard are mocked first
+import BooksList from './SearchBooks'
 
 describe('SearchBooks', () => {
-  const mockSearchBooks = jest.fn()
-  const mockClearBooks = jest.fn()
-
   beforeEach(() => {
     jest.clearAllMocks()
 
-    // Настраиваем мок перед каждым тестом
-    ;(useGoogleBooks as jest.Mock).mockReturnValue({
-      books: [],
-      loading: false,
-      error: null,
-      searchBooks: mockSearchBooks, // ← передаём в мок
-      clearBooks: mockClearBooks, // ← передаём в мок
-      hasMore: true,
-    })
+    mockUseBooksSearchQuery.mockReturnValue(createBooksSearchQueryResult())
   })
 
   test('renders search input and buttons', () => {
     render(<BooksList />)
 
-    const input = screen.getByPlaceholderText('search.inputPlaceholder')
-    expect(input).toBeInTheDocument()
-
-    const searchButton = screen.getByRole('button', { name: 'search.searchButton' })
-    expect(searchButton).toBeInTheDocument()
-
-    const clearButton = screen.getByRole('button', { name: 'search.clearButton' })
-    expect(clearButton).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('search.inputPlaceholder')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'search.searchButton' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'search.clearButton' })).toBeInTheDocument()
   })
 
-  test('calls searchBooks when search button is clicked', async () => {
+  test('updates submitted query when search button is clicked', async () => {
     const user = userEvent.setup()
+
     render(<BooksList />)
 
     const input = screen.getByPlaceholderText('search.inputPlaceholder')
@@ -48,45 +73,63 @@ describe('SearchBooks', () => {
     const searchButton = screen.getByRole('button', { name: 'search.searchButton' })
     await user.click(searchButton)
 
-    expect(mockSearchBooks).toHaveBeenCalledWith('Pigs', 20)
+    expect(mockUseBooksSearchQuery).toHaveBeenLastCalledWith('Pigs', 20)
   })
 
-  test('calls clearBooks when clear button is clicked', async () => {
+  test('updates submitted query when Enter is pressed', async () => {
     const user = userEvent.setup()
+
+    render(<BooksList />)
+
+    const input = screen.getByPlaceholderText('search.inputPlaceholder')
+    await user.type(input, 'Pigs{Enter}')
+
+    expect(mockUseBooksSearchQuery).toHaveBeenLastCalledWith('Pigs', 20)
+  })
+
+  test('clears input and resets submitted query when clear button is clicked', async () => {
+    const user = userEvent.setup()
+
     render(<BooksList />)
 
     const input = screen.getByPlaceholderText('search.inputPlaceholder')
     await user.type(input, 'Pigs')
 
+    const searchButton = screen.getByRole('button', { name: 'search.searchButton' })
+    await user.click(searchButton)
+
     const clearButton = screen.getByRole('button', { name: 'search.clearButton' })
     await user.click(clearButton)
 
-    expect(mockClearBooks).toHaveBeenCalled()
     expect(input).toHaveValue('')
+    expect(mockUseBooksSearchQuery).toHaveBeenLastCalledWith('', 20)
   })
 
   test('shows loading state', () => {
-    ;(useGoogleBooks as jest.Mock).mockReturnValue({
-      books: [],
-      loading: true,
-      error: null,
-      searchBooks: jest.fn(),
-      clearBooks: jest.fn(),
-    })
+    mockUseBooksSearchQuery.mockReturnValue(createBooksSearchQueryResult({ isLoading: true }))
 
     render(<BooksList />)
 
     expect(screen.getByText('search.loadingLabel')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'search.searchingButton' })).toBeDisabled()
+  })
+
+  test('shows fetching state', () => {
+    mockUseBooksSearchQuery.mockReturnValue(createBooksSearchQueryResult({ isFetching: true }))
+
+    render(<BooksList />)
+
+    expect(screen.getByText('search.loadingLabel')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'search.searchingButton' })).toBeDisabled()
   })
 
   test('shows error message', () => {
-    ;(useGoogleBooks as jest.Mock).mockReturnValue({
-      books: [],
-      loading: false,
-      error: 'Network error',
-      searchBooks: jest.fn(),
-      clearBooks: jest.fn(),
-    })
+    mockUseBooksSearchQuery.mockReturnValue(
+      createBooksSearchQueryResult({
+        isError: true,
+        error: new Error('Network error'),
+      }),
+    )
 
     render(<BooksList />)
 
@@ -94,23 +137,43 @@ describe('SearchBooks', () => {
     expect(screen.getByText('Network error')).toBeInTheDocument()
   })
 
-  test('renders books when search returns results', () => {
-    const mockBooks = [
-      { id: '1', title: 'Book 1', authors: ['Author 1'] },
-      { id: '2', title: 'Book 2', authors: ['Author 2'] },
-    ]
+  test('renders books when search returns results', async () => {
+    const user = userEvent.setup()
 
-    ;(useGoogleBooks as jest.Mock).mockReturnValue({
-      books: mockBooks,
-      loading: false,
-      error: null,
-      searchBooks: jest.fn(),
-      clearBooks: jest.fn(),
-    })
+    mockUseBooksSearchQuery.mockReturnValue(
+      createBooksSearchQueryResult({
+        data: [
+          { id: '1', title: 'Book 1', authors: ['Author 1'] },
+          { id: '2', title: 'Book 2', authors: ['Author 2'] },
+        ],
+      }),
+    )
 
     render(<BooksList />)
 
+    const input = screen.getByPlaceholderText('search.inputPlaceholder')
+    await user.type(input, 'Pigs')
+
+    const searchButton = screen.getByRole('button', { name: 'search.searchButton' })
+    await user.click(searchButton)
+
     expect(screen.getByText('Book 1')).toBeInTheDocument()
     expect(screen.getByText('Book 2')).toBeInTheDocument()
+  })
+
+  test('shows empty state after submitted search returns no books', async () => {
+    const user = userEvent.setup()
+
+    render(<BooksList />)
+
+    const input = screen.getByPlaceholderText('search.inputPlaceholder')
+    await user.type(input, 'Unknown Book')
+
+    const searchButton = screen.getByRole('button', { name: 'search.searchButton' })
+    await user.click(searchButton)
+
+    expect(screen.getByText('search.noBooksFound')).toBeInTheDocument()
+    expect(screen.getByText('search.emptyTitle')).toBeInTheDocument()
+    expect(screen.getByText('search.emptySubtitle')).toBeInTheDocument()
   })
 })
