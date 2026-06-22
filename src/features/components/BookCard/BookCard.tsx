@@ -3,6 +3,8 @@ import type { Book } from '../../types'
 import FavoriteButton from '../FavoriteButton/FavoriteButton'
 import { useState } from 'react'
 import BookModal from '../BookDetailsModal/BookDetailsModal'
+import { useQueryClient } from '@tanstack/react-query'
+import { bookDetailsQueryOptions } from '../../books/bookQueries'
 
 interface RecommendationsBookCardProps {
   book: Book
@@ -12,6 +14,14 @@ export default function BookCard({ book }: RecommendationsBookCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedBookId, setSelectedBookId] = useState<string | null>(null)
   const { t } = useTranslation('common')
+
+  const queryClient = useQueryClient()
+
+  const prefetchBookDetails = () => {
+    if (!book.id) return
+
+    queryClient.prefetchQuery(bookDetailsQueryOptions(book.id))
+  }
 
   const openModal = () => {
     setSelectedBookId(book.id)
@@ -90,7 +100,12 @@ export default function BookCard({ book }: RecommendationsBookCardProps) {
         )}
 
         <div className='book-card__actions'>
-          <button onClick={openModal} className='book-card__details-btn'>
+          <button
+            onClick={openModal}
+            onMouseEnter={prefetchBookDetails}
+            onFocus={prefetchBookDetails}
+            className='book-card__details-btn'
+          >
             {t('bookCard.details')}
           </button>
         </div>
