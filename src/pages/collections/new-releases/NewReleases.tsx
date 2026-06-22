@@ -1,24 +1,30 @@
-import { useEffect } from 'react'
-import { useGoogleBooks } from '../../../hooks/useGoogleBooks'
+import { useBooksSearchQuery } from '../../../features/books/bookQueries'
 import BookCard from '../../../features/components/BookCard/BookCard'
 import Loader from '../../../shared/Loader/Loader'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 export default function NewReleases() {
-  const { books, loading, error, searchBooks } = useGoogleBooks()
   const NEW_RELEASES_QUERY = 'subject:fiction 2024 2025'
+
+  const {
+    data: books = [],
+    isLoading,
+    isFetching,
+    isError,
+    error,
+    refetch,
+  } = useBooksSearchQuery(NEW_RELEASES_QUERY, 40)
+
+  const loading = isLoading || isFetching
+  const errorMessage = error instanceof Error ? error.message : null
+
   const navigate = useNavigate()
 
   const { t } = useTranslation('common')
 
-  useEffect(() => {
-    searchBooks(NEW_RELEASES_QUERY, 40)
-    // eslint-disable-next-line
-  }, [])
-
   const handleRetry = () => {
-    searchBooks(NEW_RELEASES_QUERY, 40)
+    refetch()
   }
 
   const handleBack = () => {
@@ -28,7 +34,6 @@ export default function NewReleases() {
   return (
     <div className='new-releases-page'>
       <div className='new-releases-header'>
-        {/* Выносим кнопку назад отдельно от контента */}
         <button onClick={handleBack} className='new-releases-back-btn' aria-label='Go back'>
           <svg
             width='20'
@@ -70,12 +75,12 @@ export default function NewReleases() {
             <Loader />
             <p>{t('loading.loadingNewReleases')}</p>
           </div>
-        ) : error ? (
+        ) : isError && errorMessage ? (
           <div className='new-releases-error'>
             <div className='new-releases-error__content'>
               <div className='new-releases-error__icon'>😔</div>
               <h3>{t('home.featuredCollection.newReleases.unableToLoad')}</h3>
-              <p>{error}</p>
+              <p>{errorMessage}</p>
               <div className='new-releases-error__actions'>
                 <button onClick={handleRetry} className='new-releases-error__button'>
                   {t('common.tryAgain')}

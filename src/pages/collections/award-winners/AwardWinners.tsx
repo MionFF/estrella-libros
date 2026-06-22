@@ -1,24 +1,30 @@
-import { useEffect } from 'react'
-import { useGoogleBooks } from '../../../hooks/useGoogleBooks'
+import { useBooksSearchQuery } from '../../../features/books/bookQueries'
 import BookCard from '../../../features/components/BookCard/BookCard'
 import Loader from '../../../shared/Loader/Loader'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 export default function AwardWinners() {
-  const { books, loading, error, searchBooks } = useGoogleBooks()
   const AWARD_WINNERS_QUERY = 'award winning prize literature'
+
+  const {
+    data: books = [],
+    isLoading,
+    isFetching,
+    isError,
+    error,
+    refetch,
+  } = useBooksSearchQuery(AWARD_WINNERS_QUERY, 40)
+
+  const loading = isLoading || isFetching
+  const errorMessage = error instanceof Error ? error.message : null
+
   const navigate = useNavigate()
 
   const { t } = useTranslation('common')
 
-  useEffect(() => {
-    searchBooks(AWARD_WINNERS_QUERY, 40)
-    // eslint-disable-next-line
-  }, [])
-
   const handleRetry = () => {
-    searchBooks(AWARD_WINNERS_QUERY, 40)
+    refetch()
   }
 
   const handleBack = () => {
@@ -70,12 +76,12 @@ export default function AwardWinners() {
             <Loader />
             <p>{t('loading.loadingAwardWinners')}</p>
           </div>
-        ) : error ? (
+        ) : isError && errorMessage ? (
           <div className='award-winners-error'>
             <div className='award-winners-error__content'>
               <div className='award-winners-error__icon'>😔</div>
               <h3>{t('home.featuredCollection.awardWinners.unableToLoad')}</h3>
-              <p>{error}</p>
+              <p>{errorMessage}</p>
               <div className='award-winners-error__actions'>
                 <button onClick={handleRetry} className='award-winners-error__button'>
                   {t('common.tryAgain')}

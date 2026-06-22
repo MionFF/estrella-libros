@@ -1,24 +1,30 @@
-import { useEffect } from 'react'
-import { useGoogleBooks } from '../../../hooks/useGoogleBooks'
+import { useBooksSearchQuery } from '../../../features/books/bookQueries'
 import { useNavigate } from 'react-router-dom'
 import BookCard from '../../../features/components/BookCard/BookCard'
 import Loader from '../../../shared/Loader/Loader'
 import { useTranslation } from 'react-i18next'
 
 export default function FeaturedBooks() {
-  const { books, loading, error, searchBooks } = useGoogleBooks()
   const FEATURED_BOOKS_QUERY = 'fiction novel literature'
+
+  const {
+    data: books = [],
+    isLoading,
+    isFetching,
+    isError,
+    error,
+    refetch,
+  } = useBooksSearchQuery(FEATURED_BOOKS_QUERY, 40)
+
+  const loading = isLoading || isFetching
+  const errorMessage = error instanceof Error ? error.message : null
+
   const navigate = useNavigate()
 
   const { t } = useTranslation('common')
 
-  useEffect(() => {
-    searchBooks(FEATURED_BOOKS_QUERY, 40)
-    // eslint-disable-next-line
-  }, [])
-
   const handleRetry = () => {
-    searchBooks(FEATURED_BOOKS_QUERY, 40)
+    refetch()
   }
 
   const handleBack = () => {
@@ -70,12 +76,12 @@ export default function FeaturedBooks() {
             <Loader />
             <p>{t('loading.discoveringBooks')}</p>
           </div>
-        ) : error ? (
+        ) : isError && errorMessage ? (
           <div className='featured-books-error'>
             <div className='featured-books-error__content'>
               <div className='featured-books-error__icon'>😔</div>
               <h3>{t('home.featuredCollection.featuredBooks.unableToLoad')}</h3>
-              <p>{error}</p>
+              <p>{errorMessage}</p>
               <div className='featured-books-error__actions'>
                 <button onClick={handleRetry} className='featured-books-error__button'>
                   {t('common.tryAgain')}

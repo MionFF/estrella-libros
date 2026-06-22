@@ -1,14 +1,44 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import NewReleases from './NewReleases'
-import { useGoogleBooks } from '../../../hooks/useGoogleBooks'
 
 const mockNavigate = jest.fn()
-const mockSearchBooks = jest.fn()
+const mockRefetch = jest.fn()
 
-jest.mock('../../../hooks/useGoogleBooks.ts', () => ({
-  useGoogleBooks: jest.fn(),
+type MockBook = {
+  id: string
+  title: string
+}
+
+type MockBooksSearchQueryResult = {
+  data: MockBook[]
+  isLoading: boolean
+  isFetching: boolean
+  isError: boolean
+  error: Error | null
+  refetch: jest.Mock
+}
+
+const createBooksSearchQueryResult = (
+  overrides: Partial<MockBooksSearchQueryResult> = {},
+): MockBooksSearchQueryResult => ({
+  data: [],
+  isLoading: false,
+  isFetching: false,
+  isError: false,
+  error: null,
+  refetch: mockRefetch,
+  ...overrides,
+})
+
+// eslint-disable-next-line no-var
+var mockUseBooksSearchQuery = jest.fn<
+  MockBooksSearchQueryResult,
+  [query: string, maxResults?: number]
+>(() => createBooksSearchQueryResult())
+
+jest.mock('../../../features/books/bookQueries', () => ({
+  useBooksSearchQuery: mockUseBooksSearchQuery,
 }))
 
 jest.mock('react-router-dom', () => ({
@@ -18,34 +48,26 @@ jest.mock('react-router-dom', () => ({
 
 jest.mock('../../../features/components/BookCard/BookCard.tsx', () => ({
   __esModule: true,
-  // eslint-disable-next-line
-  default: ({ book }: any) => <div data-testid={'book-card'}>{book.title}</div>,
+  default: ({ book }: { book: MockBook }) => <div data-testid='book-card'>{book.title}</div>,
 }))
 
 jest.mock('../../../shared/Loader/Loader.tsx', () => ({
   __esModule: true,
-  default: () => <div data-testid={'loader'}>Loading...</div>,
+  default: () => <div data-testid='loader'>Loading...</div>,
 }))
 
-const mockUseGoogleBooks = useGoogleBooks as jest.Mock
+import NewReleases from './NewReleases'
 
 describe('NewReleases', () => {
   beforeEach(() => {
-    mockUseGoogleBooks.mockClear()
-    mockNavigate.mockClear()
-    mockSearchBooks.mockClear()
+    jest.clearAllMocks()
+    mockUseBooksSearchQuery.mockReturnValue(createBooksSearchQueryResult())
   })
 
   test('renders header section', () => {
-    mockUseGoogleBooks.mockReturnValue({
-      books: [],
-      loading: false,
-      error: null,
-      searchBooks: mockSearchBooks,
-    })
-
     render(<NewReleases />)
 
+    expect(mockUseBooksSearchQuery).toHaveBeenCalledWith('subject:fiction 2024 2025', 40)
     expect(screen.getByRole('button', { name: 'Go back' })).toBeInTheDocument()
     expect(
       screen.getByRole('heading', { name: /home.featuredCollection.newReleases.title/i }),
@@ -54,12 +76,24 @@ describe('NewReleases', () => {
   })
 
   test('renders loading state', () => {
-    mockUseGoogleBooks.mockReturnValue({
-      books: [],
-      loading: true,
-      error: null,
-      searchBooks: mockSearchBooks,
-    })
+    mockUseBooksSearchQuery.mockReturnValue(
+      createBooksSearchQueryResult({
+        isLoading: true,
+      }),
+    )
+
+    render(<NewReleases />)
+
+    expect(screen.getByTestId('loader')).toBeInTheDocument()
+    expect(screen.getByText('loading.loadingNewReleases')).toBeInTheDocument()
+  })
+
+  test('renders fetching state', () => {
+    mockUseBooksSearchQuery.mockReturnValue(
+      createBooksSearchQueryResult({
+        isFetching: true,
+      }),
+    )
 
     render(<NewReleases />)
 
@@ -68,12 +102,12 @@ describe('NewReleases', () => {
   })
 
   test('renders error state with buttons', () => {
-    mockUseGoogleBooks.mockReturnValue({
-      books: [],
-      loading: false,
-      error: 'Network error',
-      searchBooks: mockSearchBooks,
-    })
+    mockUseBooksSearchQuery.mockReturnValue(
+      createBooksSearchQueryResult({
+        isError: true,
+        error: new Error('Network error'),
+      }),
+    )
 
     render(<NewReleases />)
 
@@ -86,13 +120,6 @@ describe('NewReleases', () => {
   })
 
   test('renders empty state with buttons', () => {
-    mockUseGoogleBooks.mockReturnValue({
-      books: [],
-      loading: false,
-      error: null,
-      searchBooks: mockSearchBooks,
-    })
-
     render(<NewReleases />)
 
     expect(
@@ -106,15 +133,14 @@ describe('NewReleases', () => {
   })
 
   test('renders book list with tagline', () => {
-    mockUseGoogleBooks.mockReturnValue({
-      books: [
-        { id: '1', title: 'Book 1' },
-        { id: '2', title: 'Book 2' },
-      ],
-      loading: false,
-      error: null,
-      searchBooks: mockSearchBooks,
-    })
+    mockUseBooksSearchQuery.mockReturnValue(
+      createBooksSearchQueryResult({
+        data: [
+          { id: '1', title: 'Book 1' },
+          { id: '2', title: 'Book 2' },
+        ],
+      }),
+    )
 
     render(<NewReleases />)
 
@@ -122,34 +148,18 @@ describe('NewReleases', () => {
     expect(screen.getByText('home.featuredCollection.newReleases.tagline')).toBeInTheDocument()
   })
 
-  test('retries on retry button click', async () => {
+  test('refetches on retry button click', async () => {
     const user = userEvent.setup()
-
-    mockUseGoogleBooks.mockReturnValue({
-      books: [],
-      loading: false,
-      error: null,
-      searchBooks: mockSearchBooks,
-    })
 
     render(<NewReleases />)
 
-    mockSearchBooks.mockClear()
-
     await user.click(screen.getByRole('button', { name: 'common.tryAgain' }))
 
-    expect(mockSearchBooks).toHaveBeenCalledTimes(1)
+    expect(mockRefetch).toHaveBeenCalledTimes(1)
   })
 
   test('navigates back on back button clicks', async () => {
     const user = userEvent.setup()
-
-    mockUseGoogleBooks.mockReturnValue({
-      books: [],
-      loading: false,
-      error: null,
-      searchBooks: mockSearchBooks,
-    })
 
     render(<NewReleases />)
 
