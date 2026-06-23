@@ -1,4 +1,4 @@
-import { queryOptions, useQuery } from '@tanstack/react-query'
+import { queryOptions, useQueries, useQuery } from '@tanstack/react-query'
 import { fetchGoogleBookById, searchGoogleBooks } from '../../api/googleBooksApi'
 import { normalizeDetailedBook, normalizeSearchBook } from '../../utils/normalizeBook'
 import { bookQueryKeys } from './bookQueryKeys'
@@ -51,5 +51,14 @@ export function useBookDetailsQuery(bookId: string, enabled = true) {
   return useQuery({
     ...bookDetailsQueryOptions(bookId),
     enabled: enabled && Boolean(bookId),
+  })
+}
+
+export function useFavoriteBooksQueries(bookIds: string[]) {
+  return useQueries({
+    queries: bookIds.map(bookId => ({
+      ...bookDetailsQueryOptions(bookId),
+      enabled: Boolean(bookId),
+    })),
   })
 }
