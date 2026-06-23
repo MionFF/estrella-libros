@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
 
-// Mock child components that would pull in the real dependency chain (→ useGoogleBooks → googleBooksApi → env.ts)
+// Mock child components to keep this test focused on SearchBooks query states
 jest.mock('../BookCard/BookCard', () => ({
   __esModule: true,
   default: ({ book }: { book: { title?: string } }) =>
