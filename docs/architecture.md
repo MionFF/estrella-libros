@@ -28,43 +28,57 @@ User
 React UI
  │
  ├── Pages
- │
  ├── Features
- │
- ├── Widgets
+ └── Widgets
  │
  ▼
-Custom Hooks
+UI / Use-case Hooks
  │
- ├── useGoogleBooks
  ├── useRecommendations
  └── usePWAInstall
  │
  ▼
+TanStack Query Layer
+ │
+ ├── bookQueries
+ └── bookQueryKeys
+ │
+ ▼
+API Layer
+ │
+ └── googleBooksApi
+ │
+ ▼
 Google Books API
-```
-
 ---
 
+## 2. Directory Structure
+
+Заменить блок на:
+
+```md
 ## Directory Structure
 
 ```txt
 src/
 │
+├── api/
+│   External API clients
+│
 ├── config/
 │   Environment variables and API configuration
 │
 ├── features/
-│   Reusable domain-specific components
+│   Reusable domain-specific components, domain types, and query contracts
 │
 ├── hooks/
-│   Custom hooks and business logic
+│   Reusable behavior and use-case hooks
 │
 ├── pages/
 │   Route-level pages
 │
 ├── store/
-│   Zustand state management
+│   Zustand client state management
 │
 ├── utils/
 │   Data normalization and helper functions
@@ -77,8 +91,6 @@ src/
 │
 └── locales/
     Translation resources
-```
-
 ---
 
 ## Routing
@@ -101,30 +113,53 @@ This keeps route components focused on application flow rather than implementati
 
 The Google Books API is the primary external integration.
 
-Core API behavior is implemented inside:
+Low-level API access is implemented inside:
 
 ```txt
-hooks/useGoogleBooks
+src/api/googleBooksApi.ts
 ```
 
 Responsibilities:
 
+* build Google Books API request URLs
 * search books by query
 * fetch book details by id
-* normalize API responses
-* handle loading states
-* handle API failures
-* handle request timeouts
-* detect offline scenarios
-* provide fallback values for incomplete data
+* pass AbortSignal to fetch
+* validate the minimal response shape at the API boundary
+* return raw Google Books volumes to the query layer
 
-The hook acts as the main abstraction between the UI layer and external services.
+The API layer does not manage React state, caching, loading states, or UI behavior. It only communicates with the external data source.
+
+---
+
+## Server State
+
+Server state is managed with TanStack Query.
+
+Book-related query contracts are implemented inside:
+
+```txt
+src/features/books/bookQueries.ts
+src/features/books/bookQueryKeys.ts
+```
+
+Responsibilities:
+
+define stable query keys for book search and book details
+call the Google Books API layer through query functions
+normalize raw API responses into application book models
+manage loading, error, retry, stale, and cached states
+disable requests for empty or invalid input with enabled
+prefetch book details on user intent
+support multiple favorite book detail queries with useQueries
+
+This keeps external server data separate from local UI state and allows multiple screens to reuse cached book data.
 
 ---
 
 ## State Management
 
-Global state is managed with Zustand.
+Client state is managed with Zustand.
 
 Current global state includes:
 
@@ -146,7 +181,7 @@ Middleware:
 * devtools
 * immer
 
-Using Zustand keeps state management lightweight while avoiding unnecessary complexity.
+Using Zustand keeps local client state lightweight while TanStack Query handles external server state.
 
 ---
 
@@ -245,7 +280,8 @@ Testing is implemented with:
 
 Covered areas include:
 
-* custom hooks
+* TanStack Query based book search, details, favorites, and recommendations flows
+* reusable behavior hooks
 * Zustand store logic
 * feature components
 * route-level pages
