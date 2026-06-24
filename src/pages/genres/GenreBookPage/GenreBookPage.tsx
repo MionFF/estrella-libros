@@ -1,15 +1,13 @@
-import { useGoogleBooks } from '../../../hooks/useGoogleBooks'
-import BookCard from '../../../features/components/BookCard/BookCard'
-import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import BookCard from '../../../features/components/BookCard/BookCard'
+import { useBooksSearchQuery } from '../../../features/books/bookQueries'
 import Loader from '../../../shared/Loader/Loader'
 import { GENRES } from '../../../constants/genres'
-import { useTranslation } from 'react-i18next'
 
 export default function GenreBookPage() {
   const { genreId } = useParams()
   const navigate = useNavigate()
-  const { books, loading, error, searchBooks } = useGoogleBooks()
   const { t } = useTranslation('common')
 
   const localizedGenres = GENRES.map(genre => ({
@@ -19,31 +17,33 @@ export default function GenreBookPage() {
   }))
 
   const genre = localizedGenres.find(g => g.id === genreId)
+  const genreQuery = genre?.query ?? ''
 
-  useEffect(() => {
-    if (!genreId || !genre) return
+  const {
+    data: books = [],
+    isLoading,
+    isFetching,
+    isError,
+    error,
+    refetch,
+  } = useBooksSearchQuery(genreQuery, 40)
 
-    if (books.length === 0 && !loading && !error) {
-      searchBooks(genre.query, 40)
-    }
-    // eslint-disable-next-line
-  }, [genreId])
+  const loading = isLoading || isFetching
+  const errorMessage = error instanceof Error ? error.message : null
 
   const handleBack = () => {
     navigate('/genres')
   }
 
   const handleRetry = () => {
-    if (genre) {
-      searchBooks(genre.query, 40)
-    }
+    refetch()
   }
 
   if (!genre) {
     return (
       <div className='genre-not-found'>
         <h2>{t('genres.bookPage.emptyTitle')}</h2>
-        <button onClick={() => navigate('/genres')}>{t('genres.bookPage.backButton')}</button>
+        <button onClick={handleBack}>{t('genres.bookPage.backButton')}</button>
       </div>
     )
   }
@@ -68,12 +68,12 @@ export default function GenreBookPage() {
             <Loader />
             <p>{t('genres.bookPage.loadingLabel', { genre: genre.name })}</p>
           </div>
-        ) : error ? (
+        ) : isError && errorMessage ? (
           <div className='genre-books-error'>
             <div className='genre-books-error__content'>
               <div className='genre-books-error__icon'>😔</div>
               <h3>{t('genres.bookPage.errorTitle')}</h3>
-              <p>{error}</p>
+              <p>{errorMessage}</p>
               <button onClick={handleRetry}>{t('common.tryAgain')}</button>
             </div>
           </div>

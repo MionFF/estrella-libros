@@ -1,8 +1,23 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import BookCard from './BookCard'
 import type { Book } from '../../types'
+
+const mockPrefetchQuery = jest.fn()
+
+const mockBookDetailsQueryOptions = jest.fn((bookId: string) => ({
+  queryKey: ['books', 'details', bookId],
+}))
+
+jest.mock('@tanstack/react-query', () => ({
+  useQueryClient: () => ({
+    prefetchQuery: mockPrefetchQuery,
+  }),
+}))
+
+jest.mock('../../books/bookQueries', () => ({
+  bookDetailsQueryOptions: mockBookDetailsQueryOptions,
+}))
 
 jest.mock('../FavoriteButton/FavoriteButton', () => ({
   __esModule: true,
@@ -11,8 +26,10 @@ jest.mock('../FavoriteButton/FavoriteButton', () => ({
 
 jest.mock('../BookDetailsModal/BookDetailsModal', () => ({
   __esModule: true,
-  default: () => <div data-testid='book-modal'>BookModal</div>,
+  default: ({ bookId }: { bookId: string }) => <div data-testid='book-modal'>{bookId}</div>,
 }))
+
+import BookCard from './BookCard'
 
 describe('BookCard', () => {
   const mockBook: Book = {
@@ -20,6 +37,10 @@ describe('BookCard', () => {
     title: "Harry Potter and the Philosopher's Stone",
     authors: ['J.K. Rowling'],
   }
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
 
   test('renders book title and authors', () => {
     render(<BookCard book={mockBook} />)
@@ -68,9 +89,56 @@ describe('BookCard', () => {
 
     render(<BookCard book={mockBook} />)
 
-    const detailsBtn = screen.getByRole('button', { name: /bookCard.details/i })
-    await user.click(detailsBtn)
+    const detailsButton = screen.getByRole('button', { name: /bookCard.details/i })
+    await user.click(detailsButton)
 
     expect(screen.getByTestId('book-modal')).toBeInTheDocument()
+    expect(screen.getByTestId('book-modal')).toHaveTextContent('1')
+  })
+
+  test('prefetches book details on details button hover', async () => {
+    const user = userEvent.setup()
+
+    render(<BookCard book={mockBook} />)
+
+    const detailsButton = screen.getByRole('button', { name: /bookCard.details/i })
+    await user.hover(detailsButton)
+
+    expect(mockBookDetailsQueryOptions).toHaveBeenCalledWith('1')
+    expect(mockPrefetchQuery).toHaveBeenCalledWith({
+      queryKey: ['books', 'details', '1'],
+    })
+  })
+
+  test('prefetches book details on details button focus', async () => {
+    const user = userEvent.setup()
+
+    render(<BookCard book={mockBook} />)
+
+    const detailsButton = screen.getByRole('button', { name: /bookCard.details/i })
+    await user.tab()
+
+    expect(detailsButton).toHaveFocus()
+    expect(mockBookDetailsQueryOptions).toHaveBeenCalledWith('1')
+    expect(mockPrefetchQuery).toHaveBeenCalledWith({
+      queryKey: ['books', 'details', '1'],
+    })
+  })
+
+  test('does not prefetch when book id is missing', async () => {
+    const user = userEvent.setup()
+
+    const bookWithoutId: Book = {
+      ...mockBook,
+      id: '',
+    }
+
+    render(<BookCard book={bookWithoutId} />)
+
+    const detailsButton = screen.getByRole('button', { name: /bookCard.details/i })
+    await user.hover(detailsButton)
+
+    expect(mockBookDetailsQueryOptions).not.toHaveBeenCalled()
+    expect(mockPrefetchQuery).not.toHaveBeenCalled()
   })
 })

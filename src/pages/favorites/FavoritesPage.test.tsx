@@ -1,31 +1,41 @@
 import '@testing-library/jest-dom'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import FavoritesPage from './FavoritesPage'
-import { useGoogleBooks } from '../../hooks/useGoogleBooks'
-import { useIds } from '../../store/favStore'
-import { useNavigate } from 'react-router-dom'
+import type { Book } from '../../features/types'
+import {
+  createFavoriteBookQueryResult,
+  type MockFavoriteBookQueryResult,
+} from '../../test-utils/bookQueryMocks'
 
-const mockGetBookById = jest.fn()
 const mockNavigate = jest.fn()
 
+// eslint-disable-next-line no-var
+var mockUseIds = jest.fn<Set<string>, []>(() => new Set())
+
+// eslint-disable-next-line no-var
+var mockUseFavoriteBooksQueries = jest.fn<MockFavoriteBookQueryResult[], [bookIds: string[]]>(
+  () => [],
+)
+
+// eslint-disable-next-line no-var
+var mockUseNavigate = jest.fn<jest.Mock, []>(() => mockNavigate)
+
 jest.mock('../../store/favStore.ts', () => ({
-  useIds: jest.fn(),
+  useIds: mockUseIds,
 }))
 
-jest.mock('../../hooks/useGoogleBooks.ts', () => ({
-  useGoogleBooks: jest.fn(),
+jest.mock('../../features/books/bookQueries', () => ({
+  useFavoriteBooksQueries: mockUseFavoriteBooksQueries,
 }))
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useNavigate: jest.fn(),
+  useNavigate: mockUseNavigate,
 }))
 
 jest.mock('../../features/components/FavoritesHero/FavoritesHero', () => ({
   __esModule: true,
-  // eslint-disable-next-line
-  default: ({ title, count }: any) => (
+  default: ({ title, count }: { title: string; count?: number }) => (
     <div data-testid='favorites-hero'>
       {title} {count !== undefined && `(${count})`}
     </div>
@@ -34,8 +44,7 @@ jest.mock('../../features/components/FavoritesHero/FavoritesHero', () => ({
 
 jest.mock('../../features/components/BookCard/BookCard', () => ({
   __esModule: true,
-  // eslint-disable-next-line
-  default: ({ book }: any) => <div data-testid='book-card'>{book.title}</div>,
+  default: ({ book }: { book: Book }) => <div data-testid='book-card'>{book.title}</div>,
 }))
 
 jest.mock('../../shared/Loader/Loader', () => ({
@@ -43,38 +52,33 @@ jest.mock('../../shared/Loader/Loader', () => ({
   default: () => <div data-testid='loader'>Loading...</div>,
 }))
 
-const mockUseGoogleBooks = useGoogleBooks as jest.Mock
-const mockUseIds = useIds as jest.Mock
-const mockUseNavigate = useNavigate as jest.Mock
+import FavoritesPage from './FavoritesPage'
 
 describe('FavoritesPage', () => {
-  // Подавляем console.warn для чистоты вывода
-  beforeAll(() => {
-    jest.spyOn(console, 'warn').mockImplementation(() => {})
-  })
+  const bookOne: Book = {
+    id: '1',
+    title: 'Book 1',
+    authors: ['Author 1'],
+  }
 
-  afterAll(() => {
-    jest.restoreAllMocks()
-  })
+  const bookTwo: Book = {
+    id: '2',
+    title: 'Book 2',
+    authors: ['Author 2'],
+  }
 
   beforeEach(() => {
-    mockUseGoogleBooks.mockClear()
-    mockUseIds.mockClear()
-    mockUseNavigate.mockClear()
-    mockGetBookById.mockClear()
+    jest.clearAllMocks()
 
-    mockUseGoogleBooks.mockReturnValue({
-      getBookById: mockGetBookById,
-    })
-
+    mockUseIds.mockReturnValue(new Set())
+    mockUseFavoriteBooksQueries.mockReturnValue([])
     mockUseNavigate.mockReturnValue(mockNavigate)
   })
 
   test('renders empty state when no favorites', () => {
-    mockUseIds.mockReturnValue(new Set())
-
     render(<FavoritesPage />)
 
+    expect(mockUseFavoriteBooksQueries).toHaveBeenCalledWith([])
     expect(screen.getByRole('heading', { name: 'favorites.emptyTitle' })).toBeInTheDocument()
     expect(screen.getByText('favorites.emptySubtitle')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'search.searchButton' })).toBeInTheDocument()
@@ -82,8 +86,6 @@ describe('FavoritesPage', () => {
 
   test('navigates to search on button click in empty state', async () => {
     const user = userEvent.setup()
-
-    mockUseIds.mockReturnValue(new Set())
 
     render(<FavoritesPage />)
 
@@ -93,74 +95,97 @@ describe('FavoritesPage', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/search')
   })
 
-  test('renders loading state while fetching books', async () => {
+  test('renders loading state while fetching books', () => {
     mockUseIds.mockReturnValue(new Set(['1', '2']))
-
-    mockGetBookById.mockImplementation((key: string) => {
-      if (key === '1') return Promise.resolve({ id: '1', title: 'Book 1' })
-      if (key === '2') return Promise.resolve({ id: '2', title: 'Book 2' })
-      return Promise.resolve(null)
-    })
+    mockUseFavoriteBooksQueries.mockReturnValue([
+      createFavoriteBookQueryResult({ isLoading: true }),
+      createFavoriteBookQueryResult({ isLoading: true }),
+    ])
 
     render(<FavoritesPage />)
 
+    expect(mockUseFavoriteBooksQueries).toHaveBeenCalledWith(['1', '2'])
     expect(screen.getByTestId('loader')).toBeInTheDocument()
     expect(screen.getByText('favorites.loadingLabel')).toBeInTheDocument()
-
-    // Ждём завершения загрузки
-    await waitFor(() => {
-      expect(screen.queryByTestId('loader')).not.toBeInTheDocument()
-    })
   })
 
-  test('renders book list when books are loaded', async () => {
+  test('renders book list when books are loaded', () => {
     mockUseIds.mockReturnValue(new Set(['1', '2']))
-
-    mockGetBookById.mockImplementation((id: string) => {
-      if (id === '1') return Promise.resolve({ id: '1', title: 'Book 1' })
-      if (id === '2') return Promise.resolve({ id: '2', title: 'Book 2' })
-      return Promise.resolve(null)
-    })
+    mockUseFavoriteBooksQueries.mockReturnValue([
+      createFavoriteBookQueryResult({ data: bookOne }),
+      createFavoriteBookQueryResult({ data: bookTwo }),
+    ])
 
     render(<FavoritesPage />)
 
-    await waitFor(() => {
-      expect(screen.queryByTestId('loader')).not.toBeInTheDocument()
-    })
-
-    const bookCards = screen.getAllByTestId('book-card')
-    expect(bookCards).toHaveLength(2)
+    expect(screen.getAllByTestId('book-card')).toHaveLength(2)
+    expect(screen.getByText('Book 1')).toBeInTheDocument()
+    expect(screen.getByText('Book 2')).toBeInTheDocument()
+    expect(screen.getByTestId('favorites-hero')).toHaveTextContent('(2)')
   })
 
-  test('renders error when all books fail to load', async () => {
+  test('renders error when all books fail to load', () => {
     mockUseIds.mockReturnValue(new Set(['1', '2']))
-    mockGetBookById.mockResolvedValue(null)
+    mockUseFavoriteBooksQueries.mockReturnValue([
+      createFavoriteBookQueryResult({ isError: true }),
+      createFavoriteBookQueryResult({ isError: true }),
+    ])
 
     render(<FavoritesPage />)
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('loader')).not.toBeInTheDocument()
-    })
 
     expect(screen.getByRole('heading', { name: 'favorites.errorTitle' })).toBeInTheDocument()
     expect(screen.getByText('favorites.errorSubtitle')).toBeInTheDocument()
   })
 
-  test('renders warning when some books fail to load', async () => {
+  test('renders warning when some books fail to load', () => {
     mockUseIds.mockReturnValue(new Set(['1', '2', '3']))
-
-    mockGetBookById.mockImplementation((id: string) => {
-      if (id === '1') return Promise.resolve({ id: '1', title: 'Book 1' })
-      if (id === '2') return Promise.resolve({ id: '2', title: 'Book 2' })
-      return Promise.resolve(null)
-    })
+    mockUseFavoriteBooksQueries.mockReturnValue([
+      createFavoriteBookQueryResult({ data: bookOne }),
+      createFavoriteBookQueryResult({ data: bookTwo }),
+      createFavoriteBookQueryResult({ isError: true }),
+    ])
 
     render(<FavoritesPage />)
 
-    await waitFor(() => {
-      expect(screen.queryByTestId('loader')).not.toBeInTheDocument()
-    })
-
+    expect(screen.getAllByTestId('book-card')).toHaveLength(2)
     expect(screen.getByText(/1.*favorites.warningLabel/)).toBeInTheDocument()
+  })
+
+  test('refetches failed favorite books from error state', async () => {
+    const user = userEvent.setup()
+    const firstRefetch = jest.fn()
+    const secondRefetch = jest.fn()
+
+    mockUseIds.mockReturnValue(new Set(['1', '2']))
+    mockUseFavoriteBooksQueries.mockReturnValue([
+      createFavoriteBookQueryResult({
+        isError: true,
+        refetch: firstRefetch,
+      }),
+      createFavoriteBookQueryResult({
+        isError: true,
+        refetch: secondRefetch,
+      }),
+    ])
+
+    render(<FavoritesPage />)
+
+    await user.click(screen.getByRole('button', { name: 'common.tryAgain' }))
+
+    expect(firstRefetch).toHaveBeenCalledTimes(1)
+    expect(secondRefetch).toHaveBeenCalledTimes(1)
+  })
+
+  test('does not hide already loaded books when another favorite is fetching', () => {
+    mockUseIds.mockReturnValue(new Set(['1', '2']))
+    mockUseFavoriteBooksQueries.mockReturnValue([
+      createFavoriteBookQueryResult({ data: bookOne }),
+      createFavoriteBookQueryResult({ isFetching: true }),
+    ])
+
+    render(<FavoritesPage />)
+
+    expect(screen.queryByTestId('loader')).not.toBeInTheDocument()
+    expect(screen.getByText('Book 1')).toBeInTheDocument()
   })
 })

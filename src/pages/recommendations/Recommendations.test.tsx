@@ -1,34 +1,13 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import Recommendations from './Recommendations'
-import { useGoogleBooks } from '../../hooks/useGoogleBooks'
-
-const mockSearchBooks = jest.fn()
-
-jest.mock('../../hooks/useGoogleBooks.ts', () => ({
-  useGoogleBooks: jest.fn(),
-}))
 
 jest.mock('../../features/components/RecommendationsList/RecommendationsList.tsx', () => ({
   __esModule: true,
-  default: () => <div data-testid={'rec-list'}>Recommendations List</div>,
+  default: () => <div data-testid='rec-list'>Recommendations List</div>,
 }))
 
-const mockUseGoogleBooks = useGoogleBooks as jest.Mock
-
 describe('Recommendations', () => {
-  beforeEach(() => {
-    mockSearchBooks.mockClear()
-    mockUseGoogleBooks.mockClear()
-
-    mockUseGoogleBooks.mockReturnValue({
-      books: [],
-      loading: false,
-      error: null,
-      searchBooks: mockSearchBooks,
-    })
-  })
-
   test('renders title and subtitle', () => {
     render(<Recommendations />)
 

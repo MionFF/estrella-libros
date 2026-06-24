@@ -50,6 +50,7 @@ https://fluffy-platypus-9cfc3e.netlify.app
 * TypeScript
 * Vite
 * React Router
+* TanStack Query
 * Zustand
 * i18next / react-i18next
 * Google Books API
@@ -67,9 +68,10 @@ High-level structure:
 
 ```txt
 src/
+  api/          external API clients
   config/       environment and API config
-  features/     reusable feature components and domain types
-  hooks/        API and behavior hooks
+  features/     reusable feature components, domain types, and query contracts
+  hooks/        reusable behavior hooks
   pages/        route-level pages
   store/        Zustand state
   utils/        data cleanup and helper functions
@@ -78,21 +80,22 @@ src/
 
 Core responsibilities are separated between API integration, state management, localization, routing, and UI rendering to keep the codebase maintainable and easy to extend.
 
-## Google Books API
+## Google Books API and Server State
 
-The primary API integration is implemented through `useGoogleBooks`.
+The Google Books integration is split into two layers:
+
+* `src/api/googleBooksApi.ts` contains low-level API functions for searching books and fetching book details.
+* `src/features/books/bookQueries.ts` defines TanStack Query contracts for search, details, prefetching, and favorite book detail queries.
 
 Responsibilities include:
 
 * searching books by query
 * fetching a book by id
-* handling loading and error states
-* request timeout handling
-* offline detection
-* fallback values for incomplete API responses
-* response normalization
-* HTTPS cover image normalization
-* category and description cleanup
+* validating the minimal API response shape at the API boundary
+* normalizing raw Google Books responses into application book models
+* managing loading, error, retry, stale, and cached server state through TanStack Query
+* prefetching book details on user intent
+* supporting multiple favorite book detail queries with `useQueries`
 
 The API key is provided through an environment variable.
 
@@ -159,7 +162,7 @@ The project includes unit and React Testing Library tests.
 
 Covered areas include:
 
-* Google Books API hook behavior
+* TanStack Query based book search, details, favorites, and recommendations flows
 * PWA install hook
 * recommendations hook
 * favorites store
@@ -189,7 +192,6 @@ Current project status:
 Lint: passing
 Build: passing
 Tests: passing
-Audit: 0 vulnerabilities
 ```
 
 ## Getting Started
@@ -252,6 +254,7 @@ npm run test:coverage
 The project demonstrates:
 
 * external API integration
+* server-state management with TanStack Query
 * client-side routing
 * state management with Zustand
 * internationalization

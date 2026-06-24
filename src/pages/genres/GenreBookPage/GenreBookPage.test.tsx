@@ -1,58 +1,82 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
-import GenreBookPage from './GenreBookPage'
-import { useGoogleBooks } from '../../../hooks/useGoogleBooks'
 import userEvent from '@testing-library/user-event'
-import { useNavigate, useParams } from 'react-router-dom'
+import {
+  createBooksSearchQueryResult,
+  type MockBooksSearchQueryResult,
+} from '../../../test-utils/bookQueryMocks'
+
+const mockNavigate = jest.fn()
+const mockRefetch = jest.fn()
+
+type MockBook = {
+  id: string
+  title: string
+}
+
+// eslint-disable-next-line no-var
+var mockUseBooksSearchQuery = jest.fn<
+  MockBooksSearchQueryResult,
+  [query: string, maxResults?: number]
+>(() => createBooksSearchQueryResult())
+
+const mockUseParams = jest.fn(() => ({ genreId: 'fiction' }))
+
+jest.mock('../../../features/books/bookQueries', () => ({
+  useBooksSearchQuery: mockUseBooksSearchQuery,
+}))
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: jest.fn(),
-  useNavigate: jest.fn(),
+  useParams: () => mockUseParams(),
+  useNavigate: () => mockNavigate,
 }))
-
-jest.mock('../../../hooks/useGoogleBooks.ts', () => ({
-  useGoogleBooks: jest.fn(),
-}))
-
-const mockUseParams = useParams as jest.Mock
-const mockUseNavigate = useNavigate as jest.Mock
-const mockNavigate = jest.fn()
-const mockUseGoogleBooks = useGoogleBooks as jest.Mock
-
-mockUseParams.mockReturnValue({ genreId: 'fiction' })
-mockUseNavigate.mockReturnValue(mockNavigate)
 
 jest.mock('../../../shared/Loader/Loader.tsx', () => ({
   __esModule: true,
-  default: () => <div data-testid={'loader'}>Loading...</div>,
+  default: () => <div data-testid='loader'>Loading...</div>,
 }))
 
 jest.mock('../../../features/components/BookCard/BookCard.tsx', () => ({
   __esModule: true,
-  // eslint-disable-next-line
-  default: ({ book }: any) => <div data-testid={'book-card'}>{book.title}</div>,
+  default: ({ book }: { book: MockBook }) => <div data-testid='book-card'>{book.title}</div>,
 }))
 
+import GenreBookPage from './GenreBookPage'
+
 describe('GenreBookPage', () => {
-  const mockSearchBooks = jest.fn()
-
   beforeEach(() => {
-    mockNavigate.mockClear()
-    mockSearchBooks.mockClear()
-    mockUseGoogleBooks.mockClear()
+    jest.clearAllMocks()
+    mockUseParams.mockReturnValue({ genreId: 'fiction' })
+    mockUseBooksSearchQuery.mockReturnValue(createBooksSearchQueryResult())
+  })
 
-    // Сбрасываем useParams на дефолтное значение
-    jest.mocked(useParams).mockReturnValue({ genreId: 'fiction' })
+  test('calls query hook with genre query from route params', () => {
+    render(<GenreBookPage />)
+
+    expect(mockUseBooksSearchQuery).toHaveBeenCalledWith(expect.any(String), 40)
+    expect(mockUseBooksSearchQuery.mock.calls[0][0]).not.toBe('')
   })
 
   test('renders loading state', () => {
-    mockUseGoogleBooks.mockReturnValue({
-      books: [],
-      loading: true,
-      error: null,
-      searchBooks: mockSearchBooks,
-    })
+    mockUseBooksSearchQuery.mockReturnValue(
+      createBooksSearchQueryResult({
+        isLoading: true,
+      }),
+    )
+
+    render(<GenreBookPage />)
+
+    expect(screen.getByTestId('loader')).toBeInTheDocument()
+    expect(screen.getByText('genres.bookPage.loadingLabel')).toBeInTheDocument()
+  })
+
+  test('renders fetching state', () => {
+    mockUseBooksSearchQuery.mockReturnValue(
+      createBooksSearchQueryResult({
+        isFetching: true,
+      }),
+    )
 
     render(<GenreBookPage />)
 
@@ -61,12 +85,12 @@ describe('GenreBookPage', () => {
   })
 
   test('renders error state', () => {
-    mockUseGoogleBooks.mockReturnValue({
-      books: [],
-      loading: false,
-      error: 'Network error',
-      searchBooks: mockSearchBooks,
-    })
+    mockUseBooksSearchQuery.mockReturnValue(
+      createBooksSearchQueryResult({
+        isError: true,
+        error: new Error('Network error'),
+      }),
+    )
 
     render(<GenreBookPage />)
 
@@ -75,29 +99,23 @@ describe('GenreBookPage', () => {
   })
 
   test('renders book list', () => {
-    mockUseGoogleBooks.mockReturnValue({
-      books: [
-        { id: '1', title: 'Mr. Mercedes' },
-        { id: '2', title: 'Holly' },
-      ],
-      loading: false,
-      error: null,
-      searchBooks: mockSearchBooks,
-    })
+    mockUseBooksSearchQuery.mockReturnValue(
+      createBooksSearchQueryResult({
+        data: [
+          { id: '1', title: 'Mr. Mercedes', authors: [] },
+          { id: '2', title: 'Holly', authors: [] },
+        ],
+      }),
+    )
 
     render(<GenreBookPage />)
 
     expect(screen.getAllByTestId('book-card')).toHaveLength(2)
+    expect(screen.getByText('Mr. Mercedes')).toBeInTheDocument()
+    expect(screen.getByText('Holly')).toBeInTheDocument()
   })
 
   test('renders empty book list state', () => {
-    mockUseGoogleBooks.mockReturnValue({
-      books: [],
-      loading: false,
-      error: null,
-      searchBooks: mockSearchBooks,
-    })
-
     render(<GenreBookPage />)
 
     expect(
@@ -109,55 +127,52 @@ describe('GenreBookPage', () => {
   test('navigates back to /genres on back button click', async () => {
     const user = userEvent.setup()
 
-    mockUseGoogleBooks.mockReturnValue({
-      books: [],
-      loading: false,
-      error: null,
-      searchBooks: mockSearchBooks,
-    })
-
     render(<GenreBookPage />)
 
-    const backBtn = screen.getByRole('button', { name: /genres.bookPage.backButton/i })
-
-    await user.click(backBtn)
+    const backButton = screen.getByRole('button', { name: /genres.bookPage.backButton/i })
+    await user.click(backButton)
 
     expect(mockNavigate).toHaveBeenCalledTimes(1)
     expect(mockNavigate).toHaveBeenCalledWith('/genres')
   })
 
-  test('retries on retry button click', async () => {
+  test('refetches on retry button click', async () => {
     const user = userEvent.setup()
 
-    mockUseGoogleBooks.mockReturnValue({
-      books: [],
-      loading: false,
-      error: 'Network error',
-      searchBooks: mockSearchBooks,
-    })
+    mockUseBooksSearchQuery.mockReturnValue(
+      createBooksSearchQueryResult({
+        isError: true,
+        error: new Error('Network error'),
+        refetch: mockRefetch,
+      }),
+    )
 
     render(<GenreBookPage />)
 
-    const retryBtn = screen.getByRole('button', { name: 'common.tryAgain' })
+    await user.click(screen.getByRole('button', { name: 'common.tryAgain' }))
 
-    await user.click(retryBtn)
-
-    expect(mockSearchBooks).toHaveBeenCalledTimes(1)
+    expect(mockRefetch).toHaveBeenCalledTimes(1)
   })
 
   test('renders genre not found message when genreId is invalid', () => {
     mockUseParams.mockReturnValue({ genreId: 'unknown-genre' })
 
-    mockUseGoogleBooks.mockReturnValue({
-      books: [],
-      loading: false,
-      error: null,
-      serchBooks: mockSearchBooks,
-    })
-
     render(<GenreBookPage />)
 
     expect(screen.getByRole('heading', { name: 'genres.bookPage.emptyTitle' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'genres.bookPage.backButton' })).toBeInTheDocument()
+    expect(mockUseBooksSearchQuery).toHaveBeenCalledWith('', 40)
+  })
+
+  test('navigates back from genre not found state', async () => {
+    const user = userEvent.setup()
+
+    mockUseParams.mockReturnValue({ genreId: 'unknown-genre' })
+
+    render(<GenreBookPage />)
+
+    await user.click(screen.getByRole('button', { name: 'genres.bookPage.backButton' }))
+
+    expect(mockNavigate).toHaveBeenCalledWith('/genres')
   })
 })

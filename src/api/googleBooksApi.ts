@@ -5,6 +5,21 @@ function getGoogleBooksApiKey() {
   return getApiKey()
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null
+}
+
+function isGoogleBooksVolume(value: unknown): value is GoogleBooksVolume {
+  return isRecord(value) && typeof value.id === 'string' && isRecord(value.volumeInfo)
+}
+
+function isGoogleBooksResponse(value: unknown): value is GoogleBooksResponse {
+  return (
+    isRecord(value) &&
+    (!('items' in value) || (Array.isArray(value.items) && value.items.every(isGoogleBooksVolume)))
+  )
+}
+
 export async function searchGoogleBooks(
   query: string,
   maxResults: number = 20,
@@ -19,7 +34,11 @@ export async function searchGoogleBooks(
     throw new Error(`HTTP error! status: ${response.status}`)
   }
 
-  const data = (await response.json()) as GoogleBooksResponse
+  const data: unknown = await response.json()
+
+  if (!isGoogleBooksResponse(data)) {
+    throw new Error('Invalid Google Books search response')
+  }
 
   return data.items ?? []
 }
@@ -38,9 +57,9 @@ export async function fetchGoogleBookById(
     return null
   }
 
-  const data = (await response.json()) as GoogleBooksVolume
+  const data: unknown = await response.json()
 
-  if (!data.volumeInfo) {
+  if (!isGoogleBooksVolume(data)) {
     return null
   }
 

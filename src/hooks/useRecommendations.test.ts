@@ -1,50 +1,39 @@
 import '@testing-library/jest-dom'
 import { act, renderHook } from '@testing-library/react'
-import { useRecommendations } from './useRecommendations'
-import { useGoogleBooks } from './useGoogleBooks'
+import type { Book } from '../features/types'
+import {
+  createBooksSearchQueryResult,
+  type MockBooksSearchQueryResult,
+} from '../test-utils/bookQueryMocks'
 
-const mockSearchBooks = jest.fn()
+// eslint-disable-next-line no-var
+var mockUseBooksSearchQuery = jest.fn<
+  MockBooksSearchQueryResult,
+  [query: string, maxResults?: number]
+>(() => createBooksSearchQueryResult())
 
-jest.mock('./useGoogleBooks.ts', () => ({
-  useGoogleBooks: jest.fn(),
+jest.mock('../features/books/bookQueries', () => ({
+  useBooksSearchQuery: mockUseBooksSearchQuery,
 }))
 
-const mockUseGoogleBooks = useGoogleBooks as jest.Mock
+import { useRecommendations } from './useRecommendations'
 
 describe('useRecommendations', () => {
   beforeEach(() => {
-    mockUseGoogleBooks.mockReturnValue({
-      books: [],
-      loading: false,
-      error: null,
-      searchBooks: mockSearchBooks,
-    })
-  })
-
-  afterEach(() => {
     jest.clearAllMocks()
+    mockUseBooksSearchQuery.mockReturnValue(createBooksSearchQueryResult())
   })
 
-  test('initial state', () => {
+  test('initial state uses empty query and does not expose loading or error', () => {
     const { result } = renderHook(() => useRecommendations())
 
+    expect(mockUseBooksSearchQuery).toHaveBeenCalledWith('', 25)
     expect(result.current.books).toEqual([])
     expect(result.current.loading).toBe(false)
     expect(result.current.error).toBeNull()
   })
 
-  test('loadRecommendations calls searchBooks', () => {
-    const { result } = renderHook(() => useRecommendations())
-
-    act(() => {
-      result.current.loadRecommendations()
-    })
-
-    expect(mockSearchBooks).toHaveBeenCalledTimes(1)
-    expect(mockSearchBooks).toHaveBeenCalledWith(expect.any(String), 25)
-  })
-
-  test('loadRecommendations creates combined query from random strategies', () => {
+  test('loadRecommendations updates query for TanStack Query search', () => {
     const randomSpy = jest.spyOn(Math, 'random').mockReturnValue(0.5)
 
     const { result } = renderHook(() => useRecommendations())
@@ -53,51 +42,76 @@ describe('useRecommendations', () => {
       result.current.loadRecommendations()
     })
 
-    const callArg = mockSearchBooks.mock.calls[0][0]
+    const calls = mockUseBooksSearchQuery.mock.calls
+    const lastCall = calls[calls.length - 1]
 
-    expect(callArg).toBeTruthy()
-    expect(typeof callArg).toBe('string')
-    expect(callArg.split(' ').length).toBeGreaterThan(2)
+    expect(lastCall).toBeDefined()
+
+    const [query, maxResults] = lastCall
+
+    expect(query).toEqual(expect.any(String))
+    expect(query).not.toBe('')
+    expect(maxResults).toBe(25)
 
     randomSpy.mockRestore()
   })
 
-  test('propagates loading state from useGoogleBooks', () => {
-    mockUseGoogleBooks.mockReturnValue({
-      books: [],
-      loading: true,
-      error: null,
-      searchBooks: mockSearchBooks,
-    })
+  test('returns loading state from query hook', () => {
+    mockUseBooksSearchQuery.mockReturnValue(
+      createBooksSearchQueryResult({
+        isLoading: true,
+      }),
+    )
 
     const { result } = renderHook(() => useRecommendations())
 
     expect(result.current.loading).toBe(true)
   })
-  test('propagates error state from useGoogleBooks', () => {
-    mockUseGoogleBooks.mockReturnValue({
-      books: [],
-      loading: false,
-      error: 'Network error',
-      searchBooks: mockSearchBooks,
-    })
+
+  test('returns fetching state as loading', () => {
+    mockUseBooksSearchQuery.mockReturnValue(
+      createBooksSearchQueryResult({
+        isFetching: true,
+      }),
+    )
+
+    const { result } = renderHook(() => useRecommendations())
+
+    expect(result.current.loading).toBe(true)
+  })
+
+  test('returns error message from query hook', () => {
+    mockUseBooksSearchQuery.mockReturnValue(
+      createBooksSearchQueryResult({
+        isError: true,
+        error: new Error('Network error'),
+      }),
+    )
 
     const { result } = renderHook(() => useRecommendations())
 
     expect(result.current.error).toBe('Network error')
   })
-  test('propagates books from useGoogleBooks', () => {
-    const mockBooks = [
+
+  test('returns null error when query has unknown error shape', () => {
+    mockUseBooksSearchQuery.mockReturnValue(createBooksSearchQueryResult({ isError: true }))
+
+    const { result } = renderHook(() => useRecommendations())
+
+    expect(result.current.error).toBeNull()
+  })
+
+  test('returns books from query hook', () => {
+    const mockBooks: Book[] = [
       { id: '1', title: 'Mr. Mercedes', authors: ['Stephen King'] },
       { id: '2', title: 'Holly', authors: ['Stephen King'] },
     ]
 
-    mockUseGoogleBooks.mockReturnValue({
-      books: mockBooks,
-      loading: false,
-      error: null,
-      searchBooks: mockSearchBooks,
-    })
+    mockUseBooksSearchQuery.mockReturnValue(
+      createBooksSearchQueryResult({
+        data: mockBooks,
+      }),
+    )
 
     const { result } = renderHook(() => useRecommendations())
 

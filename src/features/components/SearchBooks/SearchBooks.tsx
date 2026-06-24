@@ -1,13 +1,24 @@
-import { useGoogleBooks } from '../../../hooks/useGoogleBooks'
 import Loader from '../../../shared/Loader/Loader'
 import React, { useState } from 'react'
 import BookCard from '../BookCard/BookCard'
 import { useTranslation } from 'react-i18next'
+import { useBooksSearchQuery } from '../../books/bookQueries'
 
 export default function BooksList() {
-  const { books, loading, error, searchBooks, clearBooks } = useGoogleBooks()
   const [searchQuery, setSearchQuery] = useState('')
+  const [submittedQuery, setSubmittedQuery] = useState('')
   const [hasSearched, setHasSearched] = useState(false)
+
+  const {
+    data: books = [],
+    isLoading,
+    isFetching,
+    isError,
+    error,
+  } = useBooksSearchQuery(submittedQuery, 20)
+
+  const loading = isLoading || isFetching
+  const errorMessage = error instanceof Error ? error.message : null
 
   const { t } = useTranslation('common')
 
@@ -17,14 +28,14 @@ export default function BooksList() {
     if (!trimmedQuery) return
 
     setSearchQuery(trimmedQuery)
+    setSubmittedQuery(trimmedQuery)
     setHasSearched(true)
-    searchBooks(trimmedQuery, 20)
   }
 
   const handleClear = () => {
     setSearchQuery('')
+    setSubmittedQuery('')
     setHasSearched(false)
-    clearBooks()
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -112,11 +123,11 @@ export default function BooksList() {
         </div>
       )}
 
-      {error && (
+      {isError && errorMessage && (
         <div className='search-books__error'>
           <div className='search-books__error-message'>
             <h3>{t('search.errorMessage')}</h3>
-            <p>{error}</p>
+            <p>{errorMessage}</p>
             <button
               onClick={() => handleSearch(searchQuery)}
               className='search-books__button search-books__button--primary'
@@ -127,7 +138,7 @@ export default function BooksList() {
         </div>
       )}
 
-      {!loading && !error && (
+      {!loading && !isError && (
         <div className='search-books__results'>
           {hasSearched && (
             <div className='search-books__results-header'>
