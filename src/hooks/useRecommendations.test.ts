@@ -1,25 +1,10 @@
 import '@testing-library/jest-dom'
 import { act, renderHook } from '@testing-library/react'
 import type { Book } from '../features/types'
-
-type MockBooksSearchQueryResult = {
-  data: Book[]
-  isLoading: boolean
-  isFetching: boolean
-  isError: boolean
-  error: Error | null
-}
-
-const createBooksSearchQueryResult = (
-  overrides: Partial<MockBooksSearchQueryResult> = {},
-): MockBooksSearchQueryResult => ({
-  data: [],
-  isLoading: false,
-  isFetching: false,
-  isError: false,
-  error: null,
-  ...overrides,
-})
+import {
+  createBooksSearchQueryResult,
+  type MockBooksSearchQueryResult,
+} from '../test-utils/bookQueryMocks'
 
 // eslint-disable-next-line no-var
 var mockUseBooksSearchQuery = jest.fn<
@@ -109,13 +94,7 @@ describe('useRecommendations', () => {
   })
 
   test('returns null error when query has unknown error shape', () => {
-    mockUseBooksSearchQuery.mockReturnValue({
-      data: [],
-      isLoading: false,
-      isFetching: false,
-      isError: true,
-      error: null,
-    })
+    mockUseBooksSearchQuery.mockReturnValue(createBooksSearchQueryResult({ isError: true }))
 
     const { result } = renderHook(() => useRecommendations())
 

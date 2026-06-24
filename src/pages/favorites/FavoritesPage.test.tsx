@@ -2,28 +2,12 @@ import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { Book } from '../../features/types'
+import {
+  createFavoriteBookQueryResult,
+  type MockFavoriteBookQueryResult,
+} from '../../test-utils/bookQueryMocks'
 
 const mockNavigate = jest.fn()
-const mockRefetch = jest.fn()
-
-type MockFavoriteBookQueryResult = {
-  data: Book | undefined
-  isLoading: boolean
-  isFetching: boolean
-  isError: boolean
-  refetch: jest.Mock
-}
-
-const createFavoriteBookQueryResult = (
-  overrides: Partial<MockFavoriteBookQueryResult> = {},
-): MockFavoriteBookQueryResult => ({
-  data: undefined,
-  isLoading: false,
-  isFetching: false,
-  isError: false,
-  refetch: mockRefetch,
-  ...overrides,
-})
 
 // eslint-disable-next-line no-var
 var mockUseIds = jest.fn<Set<string>, []>(() => new Set())

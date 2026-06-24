@@ -1,6 +1,10 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import {
+  createBooksSearchQueryResult,
+  type MockBooksSearchQueryResult,
+} from '../../../test-utils/bookQueryMocks'
 
 const mockNavigate = jest.fn()
 const mockRefetch = jest.fn()
@@ -9,27 +13,6 @@ type MockBook = {
   id: string
   title: string
 }
-
-type MockBooksSearchQueryResult = {
-  data: MockBook[]
-  isLoading: boolean
-  isFetching: boolean
-  isError: boolean
-  error: Error | null
-  refetch: jest.Mock
-}
-
-const createBooksSearchQueryResult = (
-  overrides: Partial<MockBooksSearchQueryResult> = {},
-): MockBooksSearchQueryResult => ({
-  data: [],
-  isLoading: false,
-  isFetching: false,
-  isError: false,
-  error: null,
-  refetch: mockRefetch,
-  ...overrides,
-})
 
 // eslint-disable-next-line no-var
 var mockUseBooksSearchQuery = jest.fn<
@@ -119,8 +102,8 @@ describe('GenreBookPage', () => {
     mockUseBooksSearchQuery.mockReturnValue(
       createBooksSearchQueryResult({
         data: [
-          { id: '1', title: 'Mr. Mercedes' },
-          { id: '2', title: 'Holly' },
+          { id: '1', title: 'Mr. Mercedes', authors: [] },
+          { id: '2', title: 'Holly', authors: [] },
         ],
       }),
     )
@@ -160,6 +143,7 @@ describe('GenreBookPage', () => {
       createBooksSearchQueryResult({
         isError: true,
         error: new Error('Network error'),
+        refetch: mockRefetch,
       }),
     )
 

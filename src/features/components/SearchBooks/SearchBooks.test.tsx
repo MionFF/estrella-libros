@@ -2,6 +2,10 @@ import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
+import {
+  createBooksSearchQueryResult,
+  type MockBooksSearchQueryResult,
+} from '../../../test-utils/bookQueryMocks'
 
 // Mock child components to keep this test focused on SearchBooks query states
 jest.mock('../BookCard/BookCard', () => ({
@@ -10,35 +14,11 @@ jest.mock('../BookCard/BookCard', () => ({
     React.createElement('div', { 'data-testid': 'book-card' }, book.title ?? ''),
 }))
 
-type MockBook = {
-  id: string
-  title: string
-  authors: string[]
-}
-
-type MockQueryResult = {
-  data: MockBook[]
-  isLoading: boolean
-  isFetching: boolean
-  isError: boolean
-  error: Error | null
-}
-
-const createBooksSearchQueryResult = (
-  overrides: Partial<MockQueryResult> = {},
-): MockQueryResult => ({
-  data: [],
-  isLoading: false,
-  isFetching: false,
-  isError: false,
-  error: null,
-  ...overrides,
-})
-
 // eslint-disable-next-line no-var
-var mockUseBooksSearchQuery = jest.fn<MockQueryResult, [query: string, maxResults?: number]>(() =>
-  createBooksSearchQueryResult(),
-)
+var mockUseBooksSearchQuery = jest.fn<
+  MockBooksSearchQueryResult,
+  [query: string, maxResults?: number]
+>(() => createBooksSearchQueryResult())
 
 jest.mock('../../books/bookQueries', () => ({
   useBooksSearchQuery: mockUseBooksSearchQuery,

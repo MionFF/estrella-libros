@@ -1,6 +1,10 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import {
+  createBooksSearchQueryResult,
+  type MockBooksSearchQueryResult,
+} from '../../../test-utils/bookQueryMocks'
 
 const mockNavigate = jest.fn()
 const mockRefetch = jest.fn()
@@ -9,27 +13,6 @@ type MockBook = {
   id: string
   title: string
 }
-
-type MockBooksSearchQueryResult = {
-  data: MockBook[]
-  isLoading: boolean
-  isFetching: boolean
-  isError: boolean
-  error: Error | null
-  refetch: jest.Mock
-}
-
-const createBooksSearchQueryResult = (
-  overrides: Partial<MockBooksSearchQueryResult> = {},
-): MockBooksSearchQueryResult => ({
-  data: [],
-  isLoading: false,
-  isFetching: false,
-  isError: false,
-  error: null,
-  refetch: mockRefetch,
-  ...overrides,
-})
 
 // eslint-disable-next-line no-var
 var mockUseBooksSearchQuery = jest.fn<
@@ -138,8 +121,8 @@ describe('FeaturedBooks', () => {
     mockUseBooksSearchQuery.mockReturnValue(
       createBooksSearchQueryResult({
         data: [
-          { id: '1', title: 'Book 1' },
-          { id: '2', title: 'Book 2' },
+          { id: '1', title: 'Book 1', authors: [] },
+          { id: '2', title: 'Book 2', authors: [] },
         ],
       }),
     )
@@ -152,6 +135,8 @@ describe('FeaturedBooks', () => {
 
   test('refetches on retry button click', async () => {
     const user = userEvent.setup()
+
+    mockUseBooksSearchQuery.mockReturnValue(createBooksSearchQueryResult({ refetch: mockRefetch }))
 
     render(<FeaturedBooks />)
 

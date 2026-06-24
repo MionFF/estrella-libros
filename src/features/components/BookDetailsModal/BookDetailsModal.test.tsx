@@ -2,14 +2,10 @@ import '@testing-library/jest-dom'
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { Book } from '../../types'
-
-type MockBookDetailsQueryResult = {
-  data: Book | undefined
-  isLoading: boolean
-  isFetching: boolean
-  isError: boolean
-  error: Error | null
-}
+import {
+  createBookDetailsQueryResult,
+  type MockBookDetailsQueryResult,
+} from '../../../test-utils/bookQueryMocks'
 
 const mockBook: Book = {
   id: '1',
@@ -25,17 +21,6 @@ const mockBook: Book = {
   categories: ['Fiction', 'Fantasy', 'Science'],
   language: 'English',
 }
-
-const createBookDetailsQueryResult = (
-  overrides: Partial<MockBookDetailsQueryResult> = {},
-): MockBookDetailsQueryResult => ({
-  data: undefined,
-  isLoading: false,
-  isFetching: false,
-  isError: false,
-  error: null,
-  ...overrides,
-})
 
 // eslint-disable-next-line no-var
 var mockUseBookDetailsQuery = jest.fn<
